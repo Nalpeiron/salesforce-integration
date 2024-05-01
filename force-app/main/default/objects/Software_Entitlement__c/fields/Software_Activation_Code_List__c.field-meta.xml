@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Software_Activation_Code_List__c</fullName>
+    <description>This is a list of the first 10 activation codes. This is rolled up and populated by a Flow when a code is created or updated. This is used to be pulled and displayed on the contract master device related list through a formula.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This is a list of the first 10 activation codes.</inlineHelpText>
+    <label>Software Activation Code List</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>TextArea</type>
+</CustomField>

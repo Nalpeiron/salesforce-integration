@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Feature_Value_Validation</fullName>
+    <active>true</active>
+    <description>This validates that values match the feature type</description>
+    <errorConditionFormula>OR(
+  AND(
+    (Feature_Type__c = &apos;bool&apos;),
+    NOT(OR(
+      (Feature_Value__c) = 1,
+      (Feature_Value__c) = 0)
+    ))
+  
+)</errorConditionFormula>
+    <errorDisplayField>Feature_Value__c</errorDisplayField>
+    <errorMessage>The Value must either be a number or if they type is bool it should be 0 for disabled and 1 for enabled.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Account__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <description>This holds the entitlement account, it should not be changed once set because there can be issues with the customer in Zentile not matching.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This is the account the Entitlement is connected to. The account CANNOT be changed once the entitlement is created.</inlineHelpText>
+    <label>Account</label>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>Software Entitlements</relationshipLabel>
+    <relationshipName>Software_Entitlements</relationshipName>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

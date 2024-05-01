@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Offering__c</fullName>
+    <description>This stores the SKU of the product for which the entitlement is offered. The SKU should not be changed once set.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This is the SKU in zentile for the product being licensed. It should not be changed once set.</inlineHelpText>
+    <label>Offering</label>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>TextArea</type>
+</CustomField>

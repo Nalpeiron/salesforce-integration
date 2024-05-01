@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>This will deactivate an offline with a token</description>
+        <name>Deactivate_Offline_Token</name>
+        <label>Deactivate Offline Token</label>
+        <locationX>1458</locationX>
+        <locationY>1322</locationY>
+        <actionName>Zentitle.OfflineActivations_Deactivate</actionName>
+        <actionType>externalService</actionType>
+        <connector>
+            <targetReference>Was_Deactivate_Sucessful</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>API_Fault</targetReference>
+        </faultConnector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>Zentitle_OfflineDeactivationApiRequest</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Zentitle.OfflineActivations_Deactivate</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <description>This will delete the activation that was selected</description>
+        <name>Delete_Activations</name>
+        <label>Delete Activations</label>
+        <locationX>1414</locationX>
+        <locationY>1988</locationY>
+        <actionName>Zentitle.Activations_Delete</actionName>
+        <actionType>externalService</actionType>
+        <connector>
+            <targetReference>Was_Delete_Sucessful</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>API_Fault</targetReference>
+        </faultConnector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>activationId</name>
+            <value>
+                <elementReference>SoftwareActivations.firstSelectedRow.Zentitle_Activation_ID__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>force</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>Zentitle.Activations_Delete</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <description>This will get all of the seat activations for the entitlement</description>
+        <name>Get_all_Seat_Activations</name>
+        <label>Get all Seat Activations</label>
+        <locationX>2767</locationX>
+        <locationY>242</locationY>
+        <actionName>Zentitle.Entitlements_GetActivationsSeatList</actionName>
+        <actionType>externalService</actionType>
+        <connector>
+            <targetReference>Error_Check</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>API_Fault</targetReference>
+        </faultConnector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>entitlementId</name>
+            <value>
+                <elementReference>recordId.Zentitle_Entitlement_ID__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>pageNumber</name>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>pageSize</name>
+            <value>
+                <numberValue>40.0</numberValue>
+            </value>
+        </inputParameters>
+        <nameSegment>Zentitle.Entitlements_GetActivationsSeatList</nameSegment>
+        <outputParameters>
+            <assignToReference>Zentitle_PaginatedListOfActivationModel</assignToReference>
+            <name>200</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>ResponseCode</assignToReference>
+            <name>responseCode</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>DefaultException</assignToReference>
+            <name>defaultExc</name>
+        </outputParameters>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <description>this sets the body for the offline deactivation request</description>
+        <name>Set_token_body</name>
+        <label>Set token body</label>
+        <locationX>1458</locationX>
+        <locationY>1214</locationY>
+        <assignmentItems>
+            <assignToReference>Zentitle_OfflineDeactivationApiRequest.token</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Offline_Deactivation_Token</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Deactivate_Offline_Token</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>This checks for errors with the callout to get the activations</description>
+        <name>Error_Check</name>
+        <label>Error Check</label>
+        <locationX>2767</locationX>
+        <locationY>350</locationY>
+        <defaultConnector>
+            <targetReference>Error_Callout_Screen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Error Occurred</defaultConnectorLabel>
+        <rules>
+            <name>Successful_Callout_for_Activations</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ResponseCode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>200.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Software_Activation_For_Entitlements</targetReference>
+            </connector>
+            <label>Successful Callout for Activations</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>this checks if it will be a force deactivation or just a normal offline deactivation</description>
+        <name>Type_of_Offline_Deactivation</name>
+        <label>Type of Offline Deactivation</label>
+        <locationX>1238</locationX>
+        <locationY>1106</locationY>
+        <defaultConnector>
+            <targetReference>Set_token_body</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Normal Offline Token</defaultConnectorLabel>
+        <rules>
+            <name>Force_Deactivation</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Force_Deactivation</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Delete_Activations</targetReference>
+            </connector>
+            <label>Force Deactivation</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to see if the api callout was a success for deactivation.</description>
+        <name>Was_Deactivate_Sucessful</name>
+        <label>Was Deactivate Sucessful?</label>
+        <locationX>1458</locationX>
+        <locationY>1430</locationY>
+        <defaultConnector>
+            <targetReference>deactivation_failure</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Deactivate Failure</defaultConnectorLabel>
+        <rules>
+            <name>Deactivate_Was_Successful</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Deactivate_Offline_Token.responseCode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>204.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Delete_Deactivated_Offline_Seat</targetReference>
+            </connector>
+            <label>Deactivate Was Successful</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to see if the api callout was a success.</description>
+        <name>Was_Delete_Sucessful</name>
+        <label>Was Delete Sucessful?</label>
+        <locationX>1414</locationX>
+        <locationY>2096</locationY>
+        <defaultConnector>
+            <targetReference>Deletion_Failure</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Delete Failure</defaultConnectorLabel>
+        <rules>
+            <name>Delete_Was_Successful</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Delete_Activations.responseCode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>204.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Delete_Deactivated_Seat</targetReference>
+            </connector>
+            <label>Delete Was Successful</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This validates a software entitlement was passed into the flow</description>
+        <name>Was_Record_Passed_In</name>
+        <label>Was Record Passed In?</label>
+        <locationX>1942</locationX>
+        <locationY>134</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>No_Valid_Record_Screen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Invalid record passed in</defaultConnectorLabel>
+        <rules>
+            <name>Software_Entitlement_Missing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>No_Valid_Record_Screen</targetReference>
+            </connector>
+            <label>Software Entitlement Missing</label>
+        </rules>
+        <rules>
+            <name>Sandbox_Check</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Organization.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>00DG0000000lSeW</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Label.Zentitle_Sandbox_Override</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Sandbox_Alert</targetReference>
+            </connector>
+            <label>Sandbox Check</label>
+        </rules>
+        <rules>
+            <name>Valid_Record_Passed_In</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Zentitle_Entitlement_ID__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_all_Seat_Activations</targetReference>
+            </connector>
+            <label>Valid Record Passed In</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks if the update was a success.</description>
+        <name>Was_Update_Success</name>
+        <label>Was Update Success?</label>
+        <locationX>2228</locationX>
+        <locationY>566</locationY>
+        <defaultConnector>
+            <targetReference>Error_Update_Screen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Error Occured</defaultConnectorLabel>
+        <rules>
+            <name>Update_Was_Success</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Update_Software_Activation_For_Entitlements.Var_Success</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_All_Activations</targetReference>
+            </connector>
+            <label>Update Was Success</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks if any records were selected to update.</description>
+        <name>Were_any_records_selected</name>
+        <label>Were any records selected?</label>
+        <locationX>1414</locationX>
+        <locationY>890</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Was_Record_Passed_In</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Other Rows Selected</defaultConnectorLabel>
+        <rules>
+            <name>No_Records_Selected</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>SoftwareActivations.firstSelectedRow</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <isGoTo>true</isGoTo>
+                <targetReference>Get_all_Seat_Activations</targetReference>
+            </connector>
+            <label>No Records Selected</label>
+        </rules>
+        <rules>
+            <name>Online_Records_Selected</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>SoftwareActivations.firstSelectedRow.Mode__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>online</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Delete_Activations</targetReference>
+            </connector>
+            <label>Online Records Selected</label>
+        </rules>
+        <rules>
+            <name>Offline_Record_Selected</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>SoftwareActivations.firstSelectedRow.Mode__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>offline</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Offline_Deactivate_Token_Collection</targetReference>
+            </connector>
+            <label>Offline Record Selected</label>
+        </rules>
+    </decisions>
+    <description>This flow allows a user to launch it from a Software Entitlement and then manage the activations on it by allowing a user to delete activations from online activations all from within Salesforce.</description>
+    <environments>Default</environments>
+    <interviewLabel>Software Entitlement: View and Manage Activations {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Software Entitlement: View and Manage Activations</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordDeletes>
+        <description>This will delete the deactivated seat</description>
+        <name>Delete_Deactivated_Offline_Seat</name>
+        <label>Delete Deactivated Offline Seat</label>
+        <locationX>1194</locationX>
+        <locationY>1538</locationY>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Was_Record_Passed_In</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>API_Fault</targetReference>
+        </faultConnector>
+        <inputReference>SoftwareActivations.firstSelectedRow</inputReference>
+    </recordDeletes>
+    <recordDeletes>
+        <description>This will delete the deactivated seat</description>
+        <name>Delete_Deactivated_Seat</name>
+        <label>Delete Deactivated Seat</label>
+        <locationX>1150</locationX>
+        <locationY>2204</locationY>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Was_Record_Passed_In</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>API_Fault</targetReference>
+        </faultConnector>
+        <inputReference>SoftwareActivations.firstSelectedRow</inputReference>
+    </recordDeletes>
+    <recordLookups>
+        <description>This will get all of the activations for the Software Entitlement.</description>
+        <name>Get_All_Activations</name>
+        <label>Get All Activations</label>
+        <locationX>1414</locationX>
+        <locationY>674</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Display_Activations</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>API_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Software_Entitlement__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Software_Activation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <screens>
+        <description>This displays when there is an api fault</description>
+        <name>API_Fault</name>
+        <label>API Fault</label>
+        <locationX>2514</locationX>
+        <locationY>2096</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>APIFaultMessage</name>
+            <fieldText>&lt;p&gt;An issue happened with the deactivation.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Error:&lt;/strong&gt; {!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <description>this shows when there is an error deactivating</description>
+        <name>deactivation_failure</name>
+        <label>deactivation failure</label>
+        <locationX>1722</locationX>
+        <locationY>1538</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Was_Record_Passed_In</targetReference>
+        </connector>
+        <fields>
+            <name>DeactivateErrorMessage</name>
+            <fieldText>&lt;p&gt;There was an error deactivating the offline license. &lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Error:&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;{!Deactivate_Offline_Token.defaultExc}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <description>The activation failed to deactivate screen</description>
+        <name>Deletion_Failure</name>
+        <label>Deletion Failure</label>
+        <locationX>1678</locationX>
+        <locationY>2204</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Was_Record_Passed_In</targetReference>
+        </connector>
+        <fields>
+            <name>DeactivateErrorText</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 16px;&quot;&gt;The activation failed to deactivate. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Error Message: &lt;/strong&gt;{!Delete_Activations.defaultExc}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <description>This will display all of the activations to the user.</description>
+        <name>Display_Activations</name>
+        <label>Display Activations</label>
+        <locationX>1414</locationX>
+        <locationY>782</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Were_any_records_selected</targetReference>
+        </connector>
+        <fields>
+            <name>SoftwareActivations</name>
+            <dataTypeMappings>
+                <typeName>T</typeName>
+                <typeValue>Software_Activation__c</typeValue>
+            </dataTypeMappings>
+            <extensionName>flowruntime:datatable</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value>
+                    <stringValue>Select a Software Activation to Deactivate</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>selectionMode</name>
+                <value>
+                    <stringValue>SINGLE_SELECT</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>minRowSelection</name>
+                <value>
+                    <numberValue>0.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>tableData</name>
+                <value>
+                    <elementReference>Get_All_Activations</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>shouldDisplayLabel</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columns</name>
+                <value>
+                    <stringValue>[{&quot;apiName&quot;:&quot;Seat_Id__c&quot;,&quot;guid&quot;:&quot;column-7ecb&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;Seat Id&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Status__c&quot;,&quot;guid&quot;:&quot;column-deff&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:1,&quot;label&quot;:&quot;Status&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Mode__c&quot;,&quot;guid&quot;:&quot;column-3b5a&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:2,&quot;label&quot;:&quot;Mode&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Activated_Date__c&quot;,&quot;guid&quot;:&quot;column-4a4a&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:3,&quot;label&quot;:&quot;Activated Date&quot;,&quot;type&quot;:&quot;customDateTime&quot;},{&quot;apiName&quot;:&quot;Zentitle_Activation_ID__c&quot;,&quot;guid&quot;:&quot;column-d3f4&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:4,&quot;label&quot;:&quot;Zentitle Activation ID&quot;,&quot;type&quot;:&quot;text&quot;}]</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>maxRowSelection</name>
+                <value>
+                    <numberValue>1.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>isShowSearchBar</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <nextOrFinishButtonLabel>Deactivate Selected Activation</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <description>This displays a callout error message</description>
+        <name>Error_Callout_Screen</name>
+        <label>Error Callout Screen</label>
+        <locationX>3306</locationX>
+        <locationY>458</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>ErrorCalloutText</name>
+            <fieldText>&lt;p&gt;An error occurred while retrieving information from Zentitle.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Error: &lt;/strong&gt;{!DefaultException} {!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <description>This displays a sub flow error message</description>
+        <name>Error_Update_Screen</name>
+        <label>Error Update Screen</label>
+        <locationX>3042</locationX>
+        <locationY>674</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>ErrorUpdateSubflowText</name>
+            <fieldText>&lt;p&gt;An error occurred while updating the info retrieved from Zentitle.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Error: &lt;/strong&gt;{!Update_Software_Activation_For_Entitlements.Var_Error_Message}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <description>This screen tells the user there was no valid record passed into the flow</description>
+        <name>No_Valid_Record_Screen</name>
+        <label>No Valid Record Screen</label>
+        <locationX>50</locationX>
+        <locationY>242</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>missingvalidrecord</name>
+            <fieldText>&lt;p&gt;There was no valid Software Entitlement passed into the screen flow.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <description>This screen allows a user to enter an offline deactivation token</description>
+        <name>Offline_Deactivate_Token_Collection</name>
+        <label>Offline Deactivate Token Collection</label>
+        <locationX>1238</locationX>
+        <locationY>998</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Type_of_Offline_Deactivation</targetReference>
+        </connector>
+        <fields>
+            <name>offlineinstructions</name>
+            <fieldText>&lt;p&gt;To deactivate an offline activation, a token should be provided; this should be given from the customer to BACA, and then we can enter it here; this ensures the customer actually deactivated the software on their computer. &lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Offline_Deactivation_Token</name>
+            <fieldText>Offline Deactivation Token</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Force_Deactivate</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>false</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>Force_Deactivate</name>
+            <dataType>Boolean</dataType>
+            <defaultValue>
+                <booleanValue>false</booleanValue>
+            </defaultValue>
+            <fieldText>Force Deactivate</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>forcedeactivatetext</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(255, 0, 0);&quot;&gt;WARNING: By using the force deactivate, the customer may still have access to this seat, and it does NOT mean it has been deactivated; it just frees up the seat to be used again; this should be used ONLY when the computer is dead and there is no way to get the deactivate token. &lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Force_Deactivate</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <description>This screen tells the user the flow was run in a sandbox.</description>
+        <name>Sandbox_Alert</name>
+        <label>Sandbox Alert</label>
+        <locationX>314</locationX>
+        <locationY>242</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Copy_1_of_missingvalidrecord</name>
+            <fieldText>&lt;p&gt;The flow was launched in a sandbox and the override to allow changes for zentitle objects in a sandbox was not turned on. &lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>1816</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Was_Record_Passed_In</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <description>This will update the Software Activation for the Entitlement.</description>
+        <name>Update_Software_Activation_For_Entitlements</name>
+        <label>Update Software Activation For Entitlements</label>
+        <locationX>2228</locationX>
+        <locationY>458</locationY>
+        <connector>
+            <targetReference>Was_Update_Success</targetReference>
+        </connector>
+        <flowName>Software_Entitlement_Parse_and_Update_Zentitle_Activation_Model_Sub_Flow</flowName>
+        <inputAssignments>
+            <name>Var_Software_Entitlement_ID</name>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Zentitle_PaginatedListOfActivationModel</name>
+            <value>
+                <elementReference>Zentitle_PaginatedListOfActivationModel</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <variables>
+        <description>Default Exception for the callouts</description>
+        <name>DefaultException</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the Software Entitlement record to pass in</description>
+        <name>recordId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Software_Entitlement__c</objectType>
+    </variables>
+    <variables>
+        <description>This is the http callout response code</description>
+        <name>ResponseCode</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <description>This is the body for the offline deactivation request.</description>
+        <name>Zentitle_OfflineDeactivationApiRequest</name>
+        <apexClass>ExternalService__Zentitle_OfflineDeactivationApiRequest</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the output of the activation list from the callout.</description>
+        <name>Zentitle_PaginatedListOfActivationModel</name>
+        <apexClass>ExternalService__Zentitle_PaginatedListOfActivationModel</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

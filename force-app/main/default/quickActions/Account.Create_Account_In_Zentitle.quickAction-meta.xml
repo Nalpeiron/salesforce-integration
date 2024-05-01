@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>This will create the account in Zentitle for the customer.</description>
+    <flowDefinition>Account_Create_Account_in_Zentitle</flowDefinition>
+    <label>Create Account In Zentitle</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <type>Flow</type>
+</QuickAction>

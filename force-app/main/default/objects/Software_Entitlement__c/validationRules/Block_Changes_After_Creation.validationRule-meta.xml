@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Block_Changes_After_Creation</fullName>
+    <active>true</active>
+    <description>This blocks changes to the account and offering after creation which prevents errors from occurring.</description>
+    <errorConditionFormula>AND(
+ISCHANGED(Offering__c),
+ISCHANGED(Account__c)
+)</errorConditionFormula>
+    <errorMessage>You cannot change the offering or the account ID after it has been set.</errorMessage>
+</ValidationRule>

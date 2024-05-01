@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Zentitle_Activation_ID__c</fullName>
+    <caseSensitive>true</caseSensitive>
+    <description>This ID is used for API callouts to identify this record.</description>
+    <externalId>true</externalId>
+    <inlineHelpText>This is the unique ID of the entitlement stored in zentitle.</inlineHelpText>
+    <label>Zentitle Activation ID</label>
+    <length>255</length>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

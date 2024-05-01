@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Zentitle_Attribute_ID__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description>This is the external ID that correlates to the ID stored in Zentitle.</description>
+    <externalId>true</externalId>
+    <inlineHelpText>This is the external ID that correlates to the ID stored in Zentitle.</inlineHelpText>
+    <label>Zentitle Attribute ID</label>
+    <length>255</length>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>This will get the activations for the seat.</description>
+        <name>Get_Activations</name>
+        <label>Get Activations</label>
+        <locationX>314</locationX>
+        <locationY>674</locationY>
+        <actionName>Zentitle.Entitlements_GetActivationsSeatList</actionName>
+        <actionType>externalService</actionType>
+        <connector>
+            <targetReference>Process_Activation_updates_for_entitlement</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error_Screen</targetReference>
+        </faultConnector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>entitlementId</name>
+            <value>
+                <elementReference>recordId.Zentitle_Entitlement_ID__c</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Zentitle.Entitlements_GetActivationsSeatList</nameSegment>
+        <outputParameters>
+            <assignToReference>Zentitle_PaginatedListOfActivationModel</assignToReference>
+            <name>200</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>ResponseCode</assignToReference>
+            <name>responseCode</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>DefaultException</assignToReference>
+            <name>defaultExc</name>
+        </outputParameters>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <description>This will make an outbound callout to Zentitle to get the latest Software Entitlement information.</description>
+        <name>Get_Software_Entitlement</name>
+        <label>Get Software Entitlement</label>
+        <locationX>204</locationX>
+        <locationY>242</locationY>
+        <actionName>Zentitle.Entitlements_Get</actionName>
+        <actionType>externalService</actionType>
+        <connector>
+            <targetReference>Check_For_Common_Errors</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error_Screen</targetReference>
+        </faultConnector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>entitlementId</name>
+            <value>
+                <elementReference>recordId.Zentitle_Entitlement_ID__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>expand</name>
+            <value>
+                <stringValue>attributes,features</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>Zentitle.Entitlements_Get</nameSegment>
+        <outputParameters>
+            <assignToReference>Zentitle_EntitlementModel</assignToReference>
+            <name>200</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>ResponseCode</assignToReference>
+            <name>responseCode</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>DefaultException</assignToReference>
+            <name>defaultExc</name>
+        </outputParameters>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>60.0</apiVersion>
+    <decisions>
+        <description>This will check for common errors</description>
+        <name>Check_For_Common_Errors</name>
+        <label>Check For Common Errors</label>
+        <locationX>204</locationX>
+        <locationY>350</locationY>
+        <defaultConnector>
+            <targetReference>Parse_Software_Entitlement_Attributes_and_Features</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Valid Response</defaultConnectorLabel>
+        <rules>
+            <name>Entitlement_Does_NOT_exist_in_Zentitle</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>DefaultException</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Entitlement not found</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Zentitle_Error</targetReference>
+            </connector>
+            <label>Entitlement Does NOT exist in Zentitle</label>
+        </rules>
+        <rules>
+            <name>Other_NON_200_Response</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ResponseCode</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <numberValue>200.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Zentitle_Error</targetReference>
+            </connector>
+            <label>Other NON 200 Response</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to see if the activations were successfully updated related to the Software Entitlement.</description>
+        <name>Was_Activation_Parse_Successful</name>
+        <label>Was Activation Parse Successful?</label>
+        <locationX>314</locationX>
+        <locationY>890</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error_Screen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Failed Parse</defaultConnectorLabel>
+        <rules>
+            <name>Successful_Activation_Parse</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Process_Activation_updates_for_entitlement.Var_Success</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Seat_Count</targetReference>
+            </connector>
+            <label>Successful Activation Parse</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to see if the features and attributes were successfully updated related to the Software Entitlement.</description>
+        <name>Was_Parse_Successful</name>
+        <label>Was Parse Successful?</label>
+        <locationX>710</locationX>
+        <locationY>566</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error_Screen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Failed Parse</defaultConnectorLabel>
+        <rules>
+            <name>Successful_Parse</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Parse_Software_Entitlement_Attributes_and_Features.Var_Success</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Activations</targetReference>
+            </connector>
+            <label>Successful Parse</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to validate a Software Entitlement was passed in properly.</description>
+        <name>Was_Software_Entitlement_Passed_in</name>
+        <label>Was Software Entitlement Passed in?</label>
+        <locationX>919</locationX>
+        <locationY>134</locationY>
+        <defaultConnector>
+            <targetReference>Software_Entitlement_Missing</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Software Entitlement Missing</defaultConnectorLabel>
+        <rules>
+            <name>Software_Entitlement_Passed_In</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Software_Entitlement</targetReference>
+            </connector>
+            <label>Software Entitlement Passed In</label>
+        </rules>
+    </decisions>
+    <description>This flow can be launched form the Software Entitlement record and will update the Software Entitlement with the latest values from Zentitle&apos;s licensing servers. A recorded MUST be passed in for the flow to work.</description>
+    <environments>Default</environments>
+    <interviewLabel>Software Entitlement: Refresh Software Entitlement From Zentitle {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Software Entitlement: Refresh Software Entitlement From Zentitle</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordUpdates>
+        <description>This will update the information that is stored directly on the entitlement in Zentitle</description>
+        <name>Update_Seat_Count</name>
+        <label>Update Seat Count</label>
+        <locationX>50</locationX>
+        <locationY>998</locationY>
+        <connector>
+            <targetReference>Sucessful_Update</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Error_Screen</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Entitlement_Seat_Count__c</field>
+            <value>
+                <elementReference>Zentitle_EntitlementModel.seatCount</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Software_Entitlement__c</object>
+    </recordUpdates>
+    <screens>
+        <description>This displays to inform the user of an error.</description>
+        <name>Error_Screen</name>
+        <label>Error Screen</label>
+        <locationX>314</locationX>
+        <locationY>1106</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>ErrorMessageText</name>
+            <fieldText>&lt;p&gt;An error occured, you can either close the window and try again or report the error to a Salesforce admin.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Error:&lt;/strong&gt; {!$Flow.FaultMessage} {!Parse_Software_Entitlement_Attributes_and_Features.Var_Error_Message} {!DefaultException}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>This shows when a Software Entitlement is missing</description>
+        <name>Software_Entitlement_Missing</name>
+        <label>Software Entitlement Missing</label>
+        <locationX>1634</locationX>
+        <locationY>242</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>SoftwareEntitlementMissingText</name>
+            <fieldText>&lt;p&gt;A Software Entitlement was not passed in to the screen.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <nextOrFinishButtonLabel>Report Error To Salesforce Admin</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <description>This is to inform the user the Refresh was successful.</description>
+        <name>Sucessful_Update</name>
+        <label>Sucessful Update</label>
+        <locationX>50</locationX>
+        <locationY>1106</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>SuccessMessage</name>
+            <fieldText>&lt;p&gt;The refresh of the Software Entitlement was successful. You may need to refresh your screen to see any changes.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <nextOrFinishButtonLabel>Close</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <description>This will display when the response from zentitle needs attention.</description>
+        <name>Zentitle_Error</name>
+        <label>Zentitle Error</label>
+        <locationX>204</locationX>
+        <locationY>1598</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>DisplayMissingInZentitle</name>
+            <fieldText>&lt;p&gt;The Entitlement was NOT found in Zentitle so it could NOT be refreshed.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Entitlement_Does_NOT_exist_in_Zentitle</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>OtherError</name>
+            <fieldText>&lt;p&gt;There was an error requesting information from Zentitle.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Error Message:&lt;/strong&gt; {!DefaultException}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Other_NON_200_Response</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <nextOrFinishButtonLabel>Report Error to a Salesforce Admin</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>793</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Was_Software_Entitlement_Passed_in</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <description>This sub flow will handle the complex parsing of features and attributes when an entitlement model is passed in.</description>
+        <name>Parse_Software_Entitlement_Attributes_and_Features</name>
+        <label>Parse Software Entitlement Attributes and Features</label>
+        <locationX>710</locationX>
+        <locationY>458</locationY>
+        <connector>
+            <targetReference>Was_Parse_Successful</targetReference>
+        </connector>
+        <flowName>Software_Entitlement_Parse_and_Update_Zentitle_EntitlementModel_Sub_Flow</flowName>
+        <inputAssignments>
+            <name>Var_Software_Entitlement_ID</name>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Zentitle_EntitlementModel</name>
+            <value>
+                <elementReference>Zentitle_EntitlementModel</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <subflows>
+        <description>This will call the sub flow to process the entitlements and make the required updates</description>
+        <name>Process_Activation_updates_for_entitlement</name>
+        <label>Process Activation updates for entitlement</label>
+        <locationX>314</locationX>
+        <locationY>782</locationY>
+        <connector>
+            <targetReference>Was_Activation_Parse_Successful</targetReference>
+        </connector>
+        <flowName>Software_Entitlement_Parse_and_Update_Zentitle_Activation_Model_Sub_Flow</flowName>
+        <inputAssignments>
+            <name>Var_Software_Entitlement_ID</name>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Zentitle_PaginatedListOfActivationModel</name>
+            <value>
+                <elementReference>Zentitle_PaginatedListOfActivationModel</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <variables>
+        <description>This holds the Default Exception from the callout</description>
+        <name>DefaultException</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the record ID that will be passed in when the flow runs</description>
+        <name>recordId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Software_Entitlement__c</objectType>
+    </variables>
+    <variables>
+        <description>This captures the response code from the callout.</description>
+        <name>ResponseCode</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <description>This is the Entitlement Model from the Software Entitlement</description>
+        <name>Zentitle_EntitlementModel</name>
+        <apexClass>ExternalService__Zentitle_EntitlementModel</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This holds the activated seats</description>
+        <name>Zentitle_PaginatedListOfActivationModel</name>
+        <apexClass>ExternalService__Zentitle_PaginatedListOfActivationModel</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

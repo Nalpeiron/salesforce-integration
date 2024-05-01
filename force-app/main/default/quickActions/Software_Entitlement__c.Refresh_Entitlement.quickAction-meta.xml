@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>This is used on the page to launch the screen flow to refresh the entitlement.</description>
+    <flowDefinition>Software_Entitlement_Refresh_Software_Entitlement_From_Zentitle</flowDefinition>
+    <label>Refresh Entitlement</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <type>Flow</type>
+</QuickAction>

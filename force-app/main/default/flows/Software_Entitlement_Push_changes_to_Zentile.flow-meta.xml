@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>This will make the api call out to zentitle.</description>
+        <name>Send_Updates_To_Zentitle</name>
+        <label>Send Updates To Zentitle</label>
+        <locationX>182</locationX>
+        <locationY>1382</locationY>
+        <actionName>Zentitle.Entitlements_Update</actionName>
+        <actionType>externalService</actionType>
+        <connector>
+            <targetReference>Was_Update_Successful</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>entitlementId</name>
+            <value>
+                <elementReference>recordId.Zentitle_Entitlement_ID__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>Zentitle_UpdateEntitlementApiRequest</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Zentitle.Entitlements_Update</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <description>This will add each Attribute to the array.</description>
+        <name>Add_Each_Attribute_to_Collection</name>
+        <label>Add Each Attribute to Collection</label>
+        <locationX>270</locationX>
+        <locationY>1082</locationY>
+        <assignmentItems>
+            <assignToReference>Zentitle_UpdateEntitlementApiRequest.attributes</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Zentitle_UpdateAttribute_Build</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Through_Attributes</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This will add each feature to the array.</description>
+        <name>Add_Each_Feature_to_Collection</name>
+        <label>Add Each Feature to Collection</label>
+        <locationX>270</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>Zentitle_UpdateEntitlementApiRequest.features</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Zentitle_UpdateFeature_Build</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Through_Features</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This assigns the callout fault message</description>
+        <name>Assign_Fault_Message_Callout</name>
+        <label>Assign Fault Message Callout</label>
+        <locationX>314</locationX>
+        <locationY>1598</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Error_Message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>An Error occured during the callout: {!Send_Updates_To_Zentitle.defaultExc}</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This sets the fault message for a flow fault when it happens</description>
+        <name>Assign_Fault_Message_Flow_Fault</name>
+        <label>Assign Fault Message Flow Fault</label>
+        <locationX>578</locationX>
+        <locationY>866</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Error_Message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This will build the body of each attribute to send to zentitle.</description>
+        <name>Build_Body_of_Each_Attribute</name>
+        <label>Build Body of Each Attribute</label>
+        <locationX>270</locationX>
+        <locationY>974</locationY>
+        <assignmentItems>
+            <assignToReference>Zentitle_UpdateAttribute_Build.id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Attributes.Zentitle_Attribute_ID__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Zentitle_UpdateAttribute_Build.value</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Attributes.Attribute_Value__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Add_Each_Attribute_to_Collection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This will build each feature in the array.</description>
+        <name>Build_Body_of_Each_Feature</name>
+        <label>Build Body of Each Feature</label>
+        <locationX>270</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>Zentitle_UpdateFeature_Build.id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Features.Zentitle_Feature_ID__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Zentitle_UpdateFeature_Build.value</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Features.Feature_Value__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Add_Each_Feature_to_Collection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This will build the body of the software entitlement for the API call</description>
+        <name>Build_Body_of_Software_Entitlement</name>
+        <label>Build Body of Software Entitlement</label>
+        <locationX>182</locationX>
+        <locationY>1274</locationY>
+        <assignmentItems>
+            <assignToReference>Zentitle_UpdateEntitlementApiRequest.seatCount</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>recordId.Entitlement_Seat_Count__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Zentitle_UpdateEntitlementApiRequest.hasMaintenance</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Form_HasMaintenance</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Zentitle_UpdateEntitlementApiRequest.maintenanceExpiryDate</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>recordId.Maintenance_Expiry_Date__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Send_Updates_To_Zentitle</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This sets the error for the missing record.</description>
+        <name>Missing_Record_Error</name>
+        <label>Missing Record Error</label>
+        <locationX>1370</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Error_Message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>A valid record was not passed into the sub-flow</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This sets the error since the flow is running in a sandbox without the bypass enabled.</description>
+        <name>Set_Sandbox_Error</name>
+        <label>Set Sandbox Error</label>
+        <locationX>1106</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Error_Message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>The Software_Entitlement_Push_changes_to_Zentile tried to run in a sandbox without the sandbox override enabled.</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This sets the success value to TRUE to pass to the main flow</description>
+        <name>Set_Sucess_Value</name>
+        <label>Set Sucess Value</label>
+        <locationX>50</locationX>
+        <locationY>1598</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Success</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <description>This checks to make sure an entitlement was passed into the flow</description>
+        <name>Was_a_Software_Entitlement_passed_in</name>
+        <label>Was a Software Entitlement passed in?</label>
+        <locationX>776</locationX>
+        <locationY>134</locationY>
+        <defaultConnector>
+            <targetReference>Missing_Record_Error</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Record Missing</defaultConnectorLabel>
+        <rules>
+            <name>Record_Passed_In</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_All_Valid_Features</targetReference>
+            </connector>
+            <label>Record Passed In</label>
+        </rules>
+        <rules>
+            <name>Sandbox_Alert</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Organization.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>00DG0000000lSeW</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Label.Zentitle_Sandbox_Override</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Sandbox_Error</targetReference>
+            </connector>
+            <label>Sandbox Alert</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to see if the callout was a success</description>
+        <name>Was_Update_Successful</name>
+        <label>Was Update Successful?</label>
+        <locationX>182</locationX>
+        <locationY>1490</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Fault_Message_Callout</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Error Occured</defaultConnectorLabel>
+        <rules>
+            <name>Successful_Callout</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Send_Updates_To_Zentitle.responseCode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>204.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Sucess_Value</targetReference>
+            </connector>
+            <label>Successful Callout</label>
+        </rules>
+    </decisions>
+    <description>This subflow is used to push all changes to zentitle, including the changes on the child records like Features and Attributes. This flow will be called when specific changes are made to Software Entitlements, Features, and Attributes.</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>This will be true when there is a maintenance date.</description>
+        <name>Form_HasMaintenance</name>
+        <dataType>Boolean</dataType>
+        <expression>NOT(ISBLANK(TEXT({!recordId.Maintenance_Expiry_Date__c})))</expression>
+    </formulas>
+    <interviewLabel>Software Entitlement: Push changes to Zentile {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Software Entitlement: Push changes to Zentile (Sub-Flow)</label>
+    <loops>
+        <description>This will loop through each attribute to build the array</description>
+        <name>Loop_Through_Attributes</name>
+        <label>Loop Through Attributes</label>
+        <locationX>182</locationX>
+        <locationY>866</locationY>
+        <collectionReference>Get_All_Valid_Attributes</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Build_Body_of_Each_Attribute</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Build_Body_of_Software_Entitlement</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <description>This will loop through the features to build the body for each feature.</description>
+        <name>Loop_Through_Features</name>
+        <label>Loop Through Features</label>
+        <locationX>182</locationX>
+        <locationY>350</locationY>
+        <collectionReference>Get_All_Valid_Features</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Build_Body_of_Each_Feature</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Get_All_Valid_Attributes</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>This will get all of the valid attributes to send to Zentitle.</description>
+        <name>Get_All_Valid_Attributes</name>
+        <label>Get All Valid Attributes</label>
+        <locationX>182</locationX>
+        <locationY>758</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Through_Attributes</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Assign_Fault_Message_Flow_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Software_Entitlement__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Zentitle_Attribute_ID__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Software_Attribute__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>This will get all valid features to sync</description>
+        <name>Get_All_Valid_Features</name>
+        <label>Get All Valid Features</label>
+        <locationX>182</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Through_Features</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Assign_Fault_Message_Flow_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Software_Entitlement__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Zentitle_Feature_ID__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Software_Feature__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>650</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Was_a_Software_Entitlement_passed_in</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>This is the record ID of the Software Entitlement that needs to be synced.</description>
+        <name>recordId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Software_Entitlement__c</objectType>
+    </variables>
+    <variables>
+        <description>This is the error message output to pas back to the calling flow</description>
+        <name>Var_Error_Message</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>This will be set to TRUE when the update was successful</description>
+        <name>Var_Success</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>This holds the attribute to use in the API callout.</description>
+        <name>Zentitle_UpdateAttribute_Build</name>
+        <apexClass>ExternalService__Zentitle_UpdateAttribute</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the body of the api call to zentitle.</description>
+        <name>Zentitle_UpdateEntitlementApiRequest</name>
+        <apexClass>ExternalService__Zentitle_UpdateEntitlementApiRequest</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the Features to build</description>
+        <name>Zentitle_UpdateFeature_Build</name>
+        <apexClass>ExternalService__Zentitle_UpdateFeature</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>This will upsert the software activations with the new data from Zentitle</description>
+        <name>Upsert_Software_Activations</name>
+        <label>Upsert Software Activations</label>
+        <locationX>50</locationX>
+        <locationY>1406</locationY>
+        <actionName>UpsertRecordsAction</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Set_Success</targetReference>
+        </connector>
+        <dataTypeMappings>
+            <typeName>T__records</typeName>
+            <typeValue>Software_Activation__c</typeValue>
+        </dataTypeMappings>
+        <dataTypeMappings>
+            <typeName>U__results</typeName>
+            <typeValue>Software_Activation__c</typeValue>
+        </dataTypeMappings>
+        <faultConnector>
+            <targetReference>Set_Error_Message_Upsert</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>externalIDField</name>
+            <value>
+                <stringValue>Zentitle_Activation_ID__c</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>records</name>
+            <value>
+                <elementReference>Var_Software_Activation_Collection</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>UpsertRecordsAction</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <description>This adds the activation to a collection to store it.</description>
+        <name>Add_Activation_to_Collection</name>
+        <label>Add Activation to Collection</label>
+        <locationX>402</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Software_Activation_Collection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Var_Software_Activation_Build</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Software_Activations_Current</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Through_Activations.id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Through_Activations</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This builds the activations to use outside of the loop.</description>
+        <name>Build_Activations</name>
+        <label>Build Activations</label>
+        <locationX>402</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Software_Activation_Build.Zentitle_Activation_ID__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Activations.id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Software_Activation_Build.Activated_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Activations.activated</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Software_Activation_Build.Deactivated_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Activations.deactivated</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Software_Activation_Build.Mode__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Activations.mode.oneOfString</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Software_Activation_Build.Seat_Id__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Activations.seatId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Software_Activation_Build.Software_Entitlement__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Var_Software_Entitlement_ID</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Software_Activation_Build.Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Activations.status.oneOfString</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Add_Activation_to_Collection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This sets the error message for the user to pass back to the main flow</description>
+        <name>Set_Error_Message_Delete</name>
+        <label>Set Error Message Delete</label>
+        <locationX>666</locationX>
+        <locationY>974</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Error_Message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Error During Activation Deletion: {!$Flow.FaultMessage}</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This sets the error message for the user to pass back to the main flow</description>
+        <name>Set_Error_Message_No_Records</name>
+        <label>Set Error Message No Records</label>
+        <locationX>402</locationX>
+        <locationY>2138</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Error_Message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Require Input Variables Were NOT passed into the flow.</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This sets the error message for the user to pass back to the main flow</description>
+        <name>Set_Error_Message_Upsert</name>
+        <label>Set Error Message Upsert</label>
+        <locationX>314</locationX>
+        <locationY>1514</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Error_Message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Error During Activation Upsert: {!$Flow.FaultMessage}</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This sets the success to pass back to the main flow</description>
+        <name>Set_Success</name>
+        <label>Set Success</label>
+        <locationX>314</locationX>
+        <locationY>1838</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Success</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <description>This checks to see of there are records to delete to prevent a deletion error.</description>
+        <name>Records_to_Delete</name>
+        <label>Records to Delete?</label>
+        <locationX>314</locationX>
+        <locationY>758</locationY>
+        <defaultConnector>
+            <targetReference>Delete_Old_Activations</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Records To Delete</defaultConnectorLabel>
+        <rules>
+            <name>No_Records_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Old_Activations_To_Delete</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Software_Activations_To_Create</targetReference>
+            </connector>
+            <label>No Records Found</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks if there are activations to create.</description>
+        <name>Software_Activations_To_Create</name>
+        <label>Software Activations To Create?</label>
+        <locationX>314</locationX>
+        <locationY>1298</locationY>
+        <defaultConnector>
+            <targetReference>Set_Success</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Records Staged</defaultConnectorLabel>
+        <rules>
+            <name>Activations_Are_Staged</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Var_Software_Activations_Current</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Upsert_Software_Activations</targetReference>
+            </connector>
+            <label>Activations Are Staged</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This validates the model was passed into the flow.</description>
+        <name>Was_Zentitle_PaginatedListOfActivationModel_Passed_In</name>
+        <label>Was Zentitle_PaginatedListOfActivationModel Passed In</label>
+        <locationX>402</locationX>
+        <locationY>134</locationY>
+        <defaultConnector>
+            <targetReference>Set_Error_Message_No_Records</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Model Passed in</defaultConnectorLabel>
+        <rules>
+            <name>Software_Entitlement_Record_ID_Missing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Var_Software_Entitlement_ID</leftValueReference>
+                <operator>EqualTo</operator>
+            </conditions>
+            <connector>
+                <targetReference>Set_Error_Message_No_Records</targetReference>
+            </connector>
+            <label>Software Entitlement Record ID Missing</label>
+        </rules>
+        <rules>
+            <name>Model_Passed_In</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Zentitle_PaginatedListOfActivationModel</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_Through_Activations</targetReference>
+            </connector>
+            <label>Model Passed In</label>
+        </rules>
+    </decisions>
+    <description>This flow is used to update the Software Activation. This Flow MUST have a PaginatedListOfActivationModel apex defined variable passed in and is used to parse out all of the variables and record them into the various records.</description>
+    <environments>Default</environments>
+    <interviewLabel>Software Entitlement: Parse and Update Zentitle Activation Model(Sub-Flow) {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Software Activation: Parse and Update Zentitle Activation Model (Sub-Flow)</label>
+    <loops>
+        <description>This will loop through all of the existing activations</description>
+        <name>Loop_Through_Activations</name>
+        <label>Loop Through Activations</label>
+        <locationX>314</locationX>
+        <locationY>242</locationY>
+        <collectionReference>Zentitle_PaginatedListOfActivationModel.items</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Build_Activations</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Get_Old_Activations_To_Delete</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordDeletes>
+        <description>This will delete the old activations for the Entitlement.</description>
+        <name>Delete_Old_Activations</name>
+        <label>Delete Old Activations</label>
+        <locationX>402</locationX>
+        <locationY>866</locationY>
+        <connector>
+            <targetReference>Software_Activations_To_Create</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Set_Error_Message_Delete</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Zentitle_Activation_ID__c</field>
+            <operator>NotIn</operator>
+            <value>
+                <elementReference>Var_Software_Activations_Current</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Software_Entitlement__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Var_Software_Entitlement_ID</elementReference>
+            </value>
+        </filters>
+        <object>Software_Activation__c</object>
+    </recordDeletes>
+    <recordLookups>
+        <description>This gets the old activations to delete to check if there are any.</description>
+        <name>Get_Old_Activations_To_Delete</name>
+        <label>Get Old Activations To Delete</label>
+        <locationX>314</locationX>
+        <locationY>650</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Records_to_Delete</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Software_Entitlement__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Var_Software_Entitlement_ID</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Zentitle_Activation_ID__c</field>
+            <operator>NotIn</operator>
+            <value>
+                <elementReference>Var_Software_Activations_Current</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Software_Activation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>276</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Was_Zentitle_PaginatedListOfActivationModel_Passed_In</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>This is the error message to pass back to the primary flow that called this sub flow when an error happens</description>
+        <name>Var_Error_Message</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>This holds the build variable for the software activations of the entitlement for in the loop.</description>
+        <name>Var_Software_Activation_Build</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Software_Activation__c</objectType>
+    </variables>
+    <variables>
+        <description>This holds the collection to create outside of the loop</description>
+        <name>Var_Software_Activation_Collection</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Software_Activation__c</objectType>
+    </variables>
+    <variables>
+        <description>This holds all of the activations that are currently in Zentitle and should be retained.</description>
+        <name>Var_Software_Activations_Current</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the software entitlement record ID that needs to be passed in.</description>
+        <name>Var_Software_Entitlement_ID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is set to true when the update was successful.</description>
+        <name>Var_Success</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>This is the Zentitle_PaginatedListOfActivationModel and must be passed into the flow</description>
+        <name>Zentitle_PaginatedListOfActivationModel</name>
+        <apexClass>ExternalService__Zentitle_PaginatedListOfActivationModel</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>
