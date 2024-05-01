@@ -5,7 +5,7 @@
         <name>Deactivate_Offline_Token</name>
         <label>Deactivate Offline Token</label>
         <locationX>1458</locationX>
-        <locationY>1322</locationY>
+        <locationY>1430</locationY>
         <actionName>Zentitle.OfflineActivations_Deactivate</actionName>
         <actionType>externalService</actionType>
         <connector>
@@ -31,7 +31,7 @@
         <name>Delete_Activations</name>
         <label>Delete Activations</label>
         <locationX>1414</locationX>
-        <locationY>1988</locationY>
+        <locationY>2096</locationY>
         <actionName>Zentitle.Activations_Delete</actionName>
         <actionType>externalService</actionType>
         <connector>
@@ -62,7 +62,7 @@
         <name>Get_all_Seat_Activations</name>
         <label>Get all Seat Activations</label>
         <locationX>2767</locationX>
-        <locationY>242</locationY>
+        <locationY>350</locationY>
         <actionName>Zentitle.Entitlements_GetActivationsSeatList</actionName>
         <actionType>externalService</actionType>
         <connector>
@@ -112,7 +112,7 @@
         <name>Set_token_body</name>
         <label>Set token body</label>
         <locationX>1458</locationX>
-        <locationY>1214</locationY>
+        <locationY>1322</locationY>
         <assignmentItems>
             <assignToReference>Zentitle_OfflineDeactivationApiRequest.token</assignToReference>
             <operator>Assign</operator>
@@ -129,7 +129,7 @@
         <name>Error_Check</name>
         <label>Error Check</label>
         <locationX>2767</locationX>
-        <locationY>350</locationY>
+        <locationY>458</locationY>
         <defaultConnector>
             <targetReference>Error_Callout_Screen</targetReference>
         </defaultConnector>
@@ -155,7 +155,7 @@
         <name>Type_of_Offline_Deactivation</name>
         <label>Type of Offline Deactivation</label>
         <locationX>1238</locationX>
-        <locationY>1106</locationY>
+        <locationY>1214</locationY>
         <defaultConnector>
             <targetReference>Set_token_body</targetReference>
         </defaultConnector>
@@ -181,7 +181,7 @@
         <name>Was_Deactivate_Sucessful</name>
         <label>Was Deactivate Sucessful?</label>
         <locationX>1458</locationX>
-        <locationY>1430</locationY>
+        <locationY>1538</locationY>
         <defaultConnector>
             <targetReference>deactivation_failure</targetReference>
         </defaultConnector>
@@ -207,7 +207,7 @@
         <name>Was_Delete_Sucessful</name>
         <label>Was Delete Sucessful?</label>
         <locationX>1414</locationX>
-        <locationY>2096</locationY>
+        <locationY>2204</locationY>
         <defaultConnector>
             <targetReference>Deletion_Failure</targetReference>
         </defaultConnector>
@@ -233,7 +233,7 @@
         <name>Was_Record_Passed_In</name>
         <label>Was Record Passed In?</label>
         <locationX>1942</locationX>
-        <locationY>134</locationY>
+        <locationY>242</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
             <targetReference>No_Valid_Record_Screen</targetReference>
@@ -258,10 +258,10 @@
             <name>Sandbox_Check</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Organization.Id</leftValueReference>
-                <operator>NotEqualTo</operator>
+                <leftValueReference>Get_Current_Org.IsSandbox</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>00DG0000000lSeW</stringValue>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
@@ -297,7 +297,7 @@
         <name>Was_Update_Success</name>
         <label>Was Update Success?</label>
         <locationX>2228</locationX>
-        <locationY>566</locationY>
+        <locationY>674</locationY>
         <defaultConnector>
             <targetReference>Error_Update_Screen</targetReference>
         </defaultConnector>
@@ -323,7 +323,7 @@
         <name>Were_any_records_selected</name>
         <label>Were any records selected?</label>
         <locationX>1414</locationX>
-        <locationY>890</locationY>
+        <locationY>998</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
             <targetReference>Was_Record_Passed_In</targetReference>
@@ -404,7 +404,7 @@
         <name>Delete_Deactivated_Offline_Seat</name>
         <label>Delete Deactivated Offline Seat</label>
         <locationX>1194</locationX>
-        <locationY>1538</locationY>
+        <locationY>1646</locationY>
         <connector>
             <isGoTo>true</isGoTo>
             <targetReference>Was_Record_Passed_In</targetReference>
@@ -420,7 +420,7 @@
         <name>Delete_Deactivated_Seat</name>
         <label>Delete Deactivated Seat</label>
         <locationX>1150</locationX>
-        <locationY>2204</locationY>
+        <locationY>2312</locationY>
         <connector>
             <isGoTo>true</isGoTo>
             <targetReference>Was_Record_Passed_In</targetReference>
@@ -436,7 +436,7 @@
         <name>Get_All_Activations</name>
         <label>Get All Activations</label>
         <locationX>1414</locationX>
-        <locationY>674</locationY>
+        <locationY>782</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Display_Activations</targetReference>
@@ -457,12 +457,38 @@
         <object>Software_Activation__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordLookups>
+        <description>This will get the Organization so we can use it to check if this is a sandbox or not.</description>
+        <name>Get_Current_Org</name>
+        <label>Get Current Org</label>
+        <locationX>1942</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Was_Record_Passed_In</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Sandbox_Alert</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Organization.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Organization</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <screens>
         <description>This displays when there is an api fault</description>
         <name>API_Fault</name>
         <label>API Fault</label>
         <locationX>2514</locationX>
-        <locationY>2096</locationY>
+        <locationY>2204</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -479,7 +505,7 @@
         <name>deactivation_failure</name>
         <label>deactivation failure</label>
         <locationX>1722</locationX>
-        <locationY>1538</locationY>
+        <locationY>1646</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -500,7 +526,7 @@
         <name>Deletion_Failure</name>
         <label>Deletion Failure</label>
         <locationX>1678</locationX>
-        <locationY>2204</locationY>
+        <locationY>2312</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -521,7 +547,7 @@
         <name>Display_Activations</name>
         <label>Display Activations</label>
         <locationX>1414</locationX>
-        <locationY>782</locationY>
+        <locationY>890</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -597,7 +623,7 @@
         <name>Error_Callout_Screen</name>
         <label>Error Callout Screen</label>
         <locationX>3306</locationX>
-        <locationY>458</locationY>
+        <locationY>566</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -614,7 +640,7 @@
         <name>Error_Update_Screen</name>
         <label>Error Update Screen</label>
         <locationX>3042</locationX>
-        <locationY>674</locationY>
+        <locationY>782</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -631,7 +657,7 @@
         <name>No_Valid_Record_Screen</name>
         <label>No Valid Record Screen</label>
         <locationX>50</locationX>
-        <locationY>242</locationY>
+        <locationY>350</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -648,7 +674,7 @@
         <name>Offline_Deactivate_Token_Collection</name>
         <label>Offline Deactivate Token Collection</label>
         <locationX>1238</locationX>
-        <locationY>998</locationY>
+        <locationY>1106</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -711,7 +737,7 @@
         <name>Sandbox_Alert</name>
         <label>Sandbox Alert</label>
         <locationX>314</locationX>
-        <locationY>242</locationY>
+        <locationY>350</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -727,7 +753,7 @@
         <locationX>1816</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Was_Record_Passed_In</targetReference>
+            <targetReference>Get_Current_Org</targetReference>
         </connector>
     </start>
     <status>Active</status>
@@ -736,7 +762,7 @@
         <name>Update_Software_Activation_For_Entitlements</name>
         <label>Update Software Activation For Entitlements</label>
         <locationX>2228</locationX>
-        <locationY>458</locationY>
+        <locationY>566</locationY>
         <connector>
             <targetReference>Was_Update_Success</targetReference>
         </connector>

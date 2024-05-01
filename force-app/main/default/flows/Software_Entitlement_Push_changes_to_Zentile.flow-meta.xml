@@ -5,7 +5,7 @@
         <name>Send_Updates_To_Zentitle</name>
         <label>Send Updates To Zentitle</label>
         <locationX>182</locationX>
-        <locationY>1382</locationY>
+        <locationY>1490</locationY>
         <actionName>Zentitle.Entitlements_Update</actionName>
         <actionType>externalService</actionType>
         <connector>
@@ -34,7 +34,7 @@
         <name>Add_Each_Attribute_to_Collection</name>
         <label>Add Each Attribute to Collection</label>
         <locationX>270</locationX>
-        <locationY>1082</locationY>
+        <locationY>1190</locationY>
         <assignmentItems>
             <assignToReference>Zentitle_UpdateEntitlementApiRequest.attributes</assignToReference>
             <operator>Add</operator>
@@ -51,7 +51,7 @@
         <name>Add_Each_Feature_to_Collection</name>
         <label>Add Each Feature to Collection</label>
         <locationX>270</locationX>
-        <locationY>566</locationY>
+        <locationY>674</locationY>
         <assignmentItems>
             <assignToReference>Zentitle_UpdateEntitlementApiRequest.features</assignToReference>
             <operator>Add</operator>
@@ -68,7 +68,7 @@
         <name>Assign_Fault_Message_Callout</name>
         <label>Assign Fault Message Callout</label>
         <locationX>314</locationX>
-        <locationY>1598</locationY>
+        <locationY>1706</locationY>
         <assignmentItems>
             <assignToReference>Var_Error_Message</assignToReference>
             <operator>Assign</operator>
@@ -82,7 +82,7 @@
         <name>Assign_Fault_Message_Flow_Fault</name>
         <label>Assign Fault Message Flow Fault</label>
         <locationX>578</locationX>
-        <locationY>866</locationY>
+        <locationY>974</locationY>
         <assignmentItems>
             <assignToReference>Var_Error_Message</assignToReference>
             <operator>Assign</operator>
@@ -96,7 +96,7 @@
         <name>Build_Body_of_Each_Attribute</name>
         <label>Build Body of Each Attribute</label>
         <locationX>270</locationX>
-        <locationY>974</locationY>
+        <locationY>1082</locationY>
         <assignmentItems>
             <assignToReference>Zentitle_UpdateAttribute_Build.id</assignToReference>
             <operator>Assign</operator>
@@ -120,7 +120,7 @@
         <name>Build_Body_of_Each_Feature</name>
         <label>Build Body of Each Feature</label>
         <locationX>270</locationX>
-        <locationY>458</locationY>
+        <locationY>566</locationY>
         <assignmentItems>
             <assignToReference>Zentitle_UpdateFeature_Build.id</assignToReference>
             <operator>Assign</operator>
@@ -144,7 +144,7 @@
         <name>Build_Body_of_Software_Entitlement</name>
         <label>Build Body of Software Entitlement</label>
         <locationX>182</locationX>
-        <locationY>1274</locationY>
+        <locationY>1382</locationY>
         <assignmentItems>
             <assignToReference>Zentitle_UpdateEntitlementApiRequest.seatCount</assignToReference>
             <operator>Assign</operator>
@@ -175,7 +175,7 @@
         <name>Missing_Record_Error</name>
         <label>Missing Record Error</label>
         <locationX>1370</locationX>
-        <locationY>242</locationY>
+        <locationY>350</locationY>
         <assignmentItems>
             <assignToReference>Var_Error_Message</assignToReference>
             <operator>Assign</operator>
@@ -189,7 +189,7 @@
         <name>Set_Sandbox_Error</name>
         <label>Set Sandbox Error</label>
         <locationX>1106</locationX>
-        <locationY>242</locationY>
+        <locationY>350</locationY>
         <assignmentItems>
             <assignToReference>Var_Error_Message</assignToReference>
             <operator>Assign</operator>
@@ -203,7 +203,7 @@
         <name>Set_Sucess_Value</name>
         <label>Set Sucess Value</label>
         <locationX>50</locationX>
-        <locationY>1598</locationY>
+        <locationY>1706</locationY>
         <assignmentItems>
             <assignToReference>Var_Success</assignToReference>
             <operator>Assign</operator>
@@ -217,7 +217,7 @@
         <name>Was_a_Software_Entitlement_passed_in</name>
         <label>Was a Software Entitlement passed in?</label>
         <locationX>776</locationX>
-        <locationY>134</locationY>
+        <locationY>242</locationY>
         <defaultConnector>
             <targetReference>Missing_Record_Error</targetReference>
         </defaultConnector>
@@ -241,10 +241,10 @@
             <name>Sandbox_Alert</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Organization.Id</leftValueReference>
-                <operator>NotEqualTo</operator>
+                <leftValueReference>Get_Current_Org.IsSandbox</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>00DG0000000lSeW</stringValue>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
@@ -265,7 +265,7 @@
         <name>Was_Update_Successful</name>
         <label>Was Update Successful?</label>
         <locationX>182</locationX>
-        <locationY>1490</locationY>
+        <locationY>1598</locationY>
         <defaultConnector>
             <targetReference>Assign_Fault_Message_Callout</targetReference>
         </defaultConnector>
@@ -301,7 +301,7 @@
         <name>Loop_Through_Attributes</name>
         <label>Loop Through Attributes</label>
         <locationX>182</locationX>
-        <locationY>866</locationY>
+        <locationY>974</locationY>
         <collectionReference>Get_All_Valid_Attributes</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -316,7 +316,7 @@
         <name>Loop_Through_Features</name>
         <label>Loop Through Features</label>
         <locationX>182</locationX>
-        <locationY>350</locationY>
+        <locationY>458</locationY>
         <collectionReference>Get_All_Valid_Features</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -350,7 +350,7 @@
         <name>Get_All_Valid_Attributes</name>
         <label>Get All Valid Attributes</label>
         <locationX>182</locationX>
-        <locationY>758</locationY>
+        <locationY>866</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Loop_Through_Attributes</targetReference>
@@ -382,7 +382,7 @@
         <name>Get_All_Valid_Features</name>
         <label>Get All Valid Features</label>
         <locationX>182</locationX>
-        <locationY>242</locationY>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Loop_Through_Features</targetReference>
@@ -410,11 +410,37 @@
         <object>Software_Feature__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordLookups>
+        <description>This will get the Organization so we can use it to check if this is a sandbox or not.</description>
+        <name>Get_Current_Org</name>
+        <label>Get Current Org</label>
+        <locationX>776</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Was_a_Software_Entitlement_passed_in</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Assign_Fault_Message_Flow_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Organization.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Organization</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <start>
         <locationX>650</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Was_a_Software_Entitlement_passed_in</targetReference>
+            <targetReference>Get_Current_Org</targetReference>
         </connector>
     </start>
     <status>Active</status>
