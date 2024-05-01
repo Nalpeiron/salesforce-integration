@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Seat_Id__c</fullName>
+    <description>This holds the hostname of the computer the seat was activated on for identification purposes.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This is the id of the computer the death was activated on. This is pulled from the computer when it&apos;s activated.</inlineHelpText>
+    <label>Seat Id</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

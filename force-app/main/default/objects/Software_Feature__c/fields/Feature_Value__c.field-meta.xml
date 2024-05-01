@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Feature_Value__c</fullName>
+    <description>This is the value of the feature, for features that are true or false they are 1 or 0 respectively.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This is the value of the feature, for features that are true or false they are 1 or 0 respectively.</inlineHelpText>
+    <label>Feature Value</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

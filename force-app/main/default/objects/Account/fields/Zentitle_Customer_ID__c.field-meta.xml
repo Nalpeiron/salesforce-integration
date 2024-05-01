@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Zentitle_Customer_ID__c</fullName>
+    <caseSensitive>true</caseSensitive>
+    <description>This was created to store the customer id used in Zentitle.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This is the customer ID number reference used by Zentitle for customer software licensing, this value should NOT be changed once set.</inlineHelpText>
+    <label>Zentitle Customer ID</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

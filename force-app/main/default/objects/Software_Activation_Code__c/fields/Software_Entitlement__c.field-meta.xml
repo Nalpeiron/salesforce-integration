@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Software_Entitlement__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <description>This is the Software Entitlement the Activation code is tied to. Once set it should never be changed.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This is the Software Entitlement the Activation code is tied to.</inlineHelpText>
+    <label>Software Entitlement</label>
+    <referenceTo>Software_Entitlement__c</referenceTo>
+    <relationshipLabel>Software Activation Codes</relationshipLabel>
+    <relationshipName>Software_Activation_Codes</relationshipName>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Integration_Error_Occurred__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>This box will be marked as true when an integration error occurs and needs attention. This has to be manually unchecked when resolved.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This box will be marked as true when an integration error occurs and needs attention.</inlineHelpText>
+    <label>Integration Error Occurred</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

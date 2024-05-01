@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <decisions>
+        <description>This will check if there are errors with the API call.</description>
+        <name>Check_for_Errors_With_API_Call</name>
+        <label>Check for Errors With API Call</label>
+        <locationX>374</locationX>
+        <locationY>492</locationY>
+        <defaultConnector>
+            <targetReference>Record_Error_on_Software_Entitlement</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Fault Occured</defaultConnectorLabel>
+        <rules>
+            <name>Valid_Update</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Call_Subflow_to_Push_all_changes_from_Salesforce_to_Zentitle.Var_Success</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Task_To_Log_Sucessful_Sync</targetReference>
+            </connector>
+            <label>Valid Update</label>
+        </rules>
+    </decisions>
+    <description>This will sync changes that are made in Salesforce to Zentitle. This will only run on specific changes to the record. This calls the sub-flow to process the entire update.</description>
+    <environments>Default</environments>
+    <interviewLabel>Software Feature: Sync Updates To Zentitle {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Software Feature: Sync Updates To Zentitle</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <description>This creates a task to log the error on the entitlement</description>
+        <name>Create_Task_to_Log_Error</name>
+        <label>Create Task to Log Error</label>
+        <locationX>506</locationX>
+        <locationY>708</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>An Error Occured While Syncing an Update to Zentitle: {!Call_Subflow_to_Push_all_changes_from_Salesforce_to_Zentitle.Var_Error_Message}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>An Error Occured While Syncing a feature Update to Zentitle at {!$Flow.CurrentDateTime}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>$Record.Software_Entitlement__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <description>This creates a task to log the success on the entitlement</description>
+        <name>Create_Task_To_Log_Sucessful_Sync</name>
+        <label>Create Task To Log Sucessful Sync</label>
+        <locationX>242</locationX>
+        <locationY>600</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Successful Push to Zentitle Triggered by Feature at {!$Flow.CurrentDateTime}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>$Record.Software_Entitlement__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <description>This will get the software entitlement as a record variable to push to the subflow</description>
+        <name>Get_Software_Entitlement</name>
+        <label>Get Software Entitlement</label>
+        <locationX>374</locationX>
+        <locationY>276</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Call_Subflow_to_Push_all_changes_from_Salesforce_to_Zentitle</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Software_Entitlement__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Software_Entitlement__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>This records the error on the Entitlement Record</description>
+        <name>Record_Error_on_Software_Entitlement</name>
+        <label>Record Error on Software Entitlement</label>
+        <locationX>506</locationX>
+        <locationY>600</locationY>
+        <connector>
+            <targetReference>Create_Task_to_Log_Error</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Integration_Error_Occurred__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Software_Entitlement__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Feature_Value__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Software_Feature__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <scheduledPaths>
+            <connector>
+                <targetReference>Get_Software_Entitlement</targetReference>
+            </connector>
+            <pathType>AsyncAfterCommit</pathType>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <description>This will call the subflow to force a full sync that pushes al changes to values on features, attributes, and the software entitlement record back into Zentitle.</description>
+        <name>Call_Subflow_to_Push_all_changes_from_Salesforce_to_Zentitle</name>
+        <label>Call Subflow to Push all changes from Salesforce to Zentitle</label>
+        <locationX>374</locationX>
+        <locationY>384</locationY>
+        <connector>
+            <targetReference>Check_for_Errors_With_API_Call</targetReference>
+        </connector>
+        <flowName>Software_Entitlement_Push_changes_to_Zentile</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>Get_Software_Entitlement</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+</Flow>

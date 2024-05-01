@@ -1,0 +1,1299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>This executes the callout to make the entitlement group.</description>
+        <name>Create_Entitlement_Callout</name>
+        <label>Create Entitlement Callout</label>
+        <locationX>1084</locationX>
+        <locationY>782</locationY>
+        <actionName>Zentitle.Entitlements_Create</actionName>
+        <actionType>externalService</actionType>
+        <connector>
+            <targetReference>Check_Outcome_of_API_call</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Log_Entitlement_Creation_Error_as_Task</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>Zentitle_CreateEntitlementApiRequest</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Zentitle.Entitlements_Create</nameSegment>
+        <outputParameters>
+            <assignToReference>Zentitle_EntitlementGroupModel</assignToReference>
+            <name>201</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>ResponseCode</assignToReference>
+            <name>responseCode</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>DefaultException</assignToReference>
+            <name>defaultExc</name>
+        </outputParameters>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <description>This will get the Entitlement.</description>
+        <name>Get_Entitlements</name>
+        <label>Get Entitlements</label>
+        <locationX>622</locationX>
+        <locationY>1622</locationY>
+        <actionName>Zentitle.Entitlements_Get</actionName>
+        <actionType>externalService</actionType>
+        <connector>
+            <targetReference>Was_Get_Entitlement_Success</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>entitlementId</name>
+            <value>
+                <elementReference>Var_Entitlement_Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>expand</name>
+            <value>
+                <stringValue>attributes,features</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>Zentitle.Entitlements_Get</nameSegment>
+        <outputParameters>
+            <assignToReference>ExternalService_Zentitle_EntitlementModel_Output</assignToReference>
+            <name>200</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>ResponseCode</assignToReference>
+            <name>responseCode</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>DefaultException</assignToReference>
+            <name>defaultExc</name>
+        </outputParameters>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <description>This will set the seat count to match the software entitlements</description>
+        <name>Set_Seat_Count</name>
+        <label>Set Seat Count</label>
+        <locationX>842</locationX>
+        <locationY>1406</locationY>
+        <actionName>Zentitle.Entitlements_Update</actionName>
+        <actionType>externalService</actionType>
+        <connector>
+            <targetReference>Was_Seat_Count_Success</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>entitlementId</name>
+            <value>
+                <elementReference>Var_Entitlement_Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>Zentitle_UpdateEntitlementApiRequest</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Zentitle.Entitlements_Update</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <description>This adds the record to the collection to create outside of the loop.</description>
+        <name>Add_Activation_Code_To_Staging_Collection</name>
+        <label>Add Activation Code To Staging Collection</label>
+        <locationX>534</locationX>
+        <locationY>2570</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Activation_Code_Staging_Collection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Var_Activation_Code_Build</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Through_Activation_Codes</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This will build the activation code for the Entitlement</description>
+        <name>Build_Entitlement_Activation_Code</name>
+        <label>Build Entitlement Activation Code</label>
+        <locationX>534</locationX>
+        <locationY>2462</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Activation_Code_Build.Software_Entitlement__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Activation_Code_Build.Activation_Code__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Activation_Codes</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Add_Activation_Code_To_Staging_Collection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This sets the error for no record being passed in</description>
+        <name>No_Record_Passed_In_Error</name>
+        <label>No Record Passed In Error</label>
+        <locationX>2215</locationX>
+        <locationY>4082</locationY>
+        <assignmentItems>
+            <assignToReference>Var_ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>No Record Was Passed In</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Success</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This sets the body of the api request with values from the record.</description>
+        <name>Set_API_Request_Body_Values</name>
+        <label>Set API Request Body Values</label>
+        <locationX>1084</locationX>
+        <locationY>674</locationY>
+        <assignmentItems>
+            <assignToReference>Zentitle_CreateEntitlementApiRequest.customerId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Form_CustomerZentitleId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Zentitle_CreateEntitlementApiRequest.orderRefId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Software_Entitlement.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Zentitle_CreateEntitlementApiRequest.sku</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Software_Entitlement.Offering__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_Entitlement_Callout</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This sets the entitlement ID into a single record variable.</description>
+        <name>Set_Entitlement_ID</name>
+        <label>Set Entitlement ID</label>
+        <locationX>930</locationX>
+        <locationY>1106</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Entitlement_Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Through_Entitlements.id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Through_Entitlements</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This builds the body for the api request.</description>
+        <name>Set_Seat_Count_Body</name>
+        <label>Set Seat Count Body</label>
+        <locationX>842</locationX>
+        <locationY>1298</locationY>
+        <assignmentItems>
+            <assignToReference>Zentitle_UpdateEntitlementApiRequest.seatCount</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Software_Entitlement.Entitlement_Seat_Count__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Zentitle_UpdateEntitlementApiRequest.maintenanceExpiryDate</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Software_Entitlement.Maintenance_Expiry_Date__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Zentitle_UpdateEntitlementApiRequest.hasMaintenance</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Form_HasMaintenance</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Set_Seat_Count</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This sets the success message for the flow</description>
+        <name>Set_Success</name>
+        <label>Set Success</label>
+        <locationX>446</locationX>
+        <locationY>3278</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Success</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <description>This checks to see if there are activation codes to create.</description>
+        <name>Activation_Codes_to_Create</name>
+        <label>Activation Codes to Create?</label>
+        <locationX>446</locationX>
+        <locationY>2762</locationY>
+        <defaultConnector>
+            <targetReference>Update_Software_Entitlement_ID_and_Group</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Records Staged</defaultConnectorLabel>
+        <rules>
+            <name>Records_Staged</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Var_Activation_Code_Staging_Collection</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Activation_Codes</targetReference>
+            </connector>
+            <label>Records Staged</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks the result of the API call.</description>
+        <name>Check_Outcome_of_API_call</name>
+        <label>Check Outcome of API call</label>
+        <locationX>1084</locationX>
+        <locationY>890</locationY>
+        <defaultConnector>
+            <targetReference>Update_Software_Entitlement_Failure_Creation</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Failure</defaultConnectorLabel>
+        <rules>
+            <name>Creation_Success</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ResponseCode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>201.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_Through_Entitlements</targetReference>
+            </connector>
+            <label>Creation Success</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to see if it was a success or a failure.</description>
+        <name>Create_Zentitle_Customer_Result</name>
+        <label>Create Zentitle Customer Result</label>
+        <locationX>1986</locationX>
+        <locationY>890</locationY>
+        <defaultConnector>
+            <targetReference>Update_Software_Entitlement_Failure</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Error Occured</defaultConnectorLabel>
+        <rules>
+            <name>Success</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Create_Zentitle_Customer.Var_Success</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <isGoTo>true</isGoTo>
+                <targetReference>Set_API_Request_Body_Values</targetReference>
+            </connector>
+            <label>Success</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to see if the Zentitle customer exists already so it can be created if not.</description>
+        <name>Does_Zentitle_Customer_Exist</name>
+        <label>Does Zentitle Customer Exist?</label>
+        <locationX>1535</locationX>
+        <locationY>566</locationY>
+        <defaultConnector>
+            <targetReference>Get_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Customer Needs to Be Created</defaultConnectorLabel>
+        <rules>
+            <name>Customer_Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Software_Entitlement.Account__r.Zentitle_Customer_ID__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_API_Request_Body_Values</targetReference>
+            </connector>
+            <label>Customer Exists</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to prevent any errors from occurring</description>
+        <name>Sanity_Check</name>
+        <label>Sanity Check</label>
+        <locationX>572</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>Does_Zentitle_Customer_Exist</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Passed Check</defaultConnectorLabel>
+        <rules>
+            <name>No_Record_Passed_In</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Software_Entitlement</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>No_Record_Passed_In_Error</targetReference>
+            </connector>
+            <label>No Record Passed In</label>
+        </rules>
+        <rules>
+            <name>Entitlement_Already_Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Software_Entitlement.Zentitle_Entitlement_ID__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Entitlement Already Exists</label>
+        </rules>
+        <rules>
+            <name>Sandbox_Check</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Organization.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>00DG0000000lSeW</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Label.Zentitle_Sandbox_Override</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Software_Entitlement_Failure_Creation_Sandbox</targetReference>
+            </connector>
+            <label>Sandbox Check</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to see if the parse was successful</description>
+        <name>Successful_Parse</name>
+        <label>Successful Parse?</label>
+        <locationX>446</locationX>
+        <locationY>1946</locationY>
+        <defaultConnector>
+            <targetReference>Set_Parse_Entitlement_Failure</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Parse Failure</defaultConnectorLabel>
+        <rules>
+            <name>Parse_was_Successful</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Parse_and_Update_Entitlement_Model.Var_Success</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_Through_Activation_Codes</targetReference>
+            </connector>
+            <label>Parse was Successful</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to see if the Entitlement was retrieved successfully.</description>
+        <name>Was_Get_Entitlement_Success</name>
+        <label>Was Get Entitlement Success?</label>
+        <locationX>622</locationX>
+        <locationY>1730</locationY>
+        <defaultConnector>
+            <targetReference>Set_Get_Entitlement_Failure</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Get Entitlement Fail</defaultConnectorLabel>
+        <rules>
+            <name>Get_Entitlement_Success</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ResponseCode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>200.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Parse_and_Update_Entitlement_Model</targetReference>
+            </connector>
+            <label>Get Entitlement Success</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to see if a record ID was passed into the flow</description>
+        <name>Was_RecordID_passed_in</name>
+        <label>Was RecordID passed in?</label>
+        <locationX>2215</locationX>
+        <locationY>134</locationY>
+        <defaultConnector>
+            <targetReference>No_Record_Passed_In_Error</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>RecordID_passed_in</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Software_Entitlement</targetReference>
+            </connector>
+            <label>RecordID passed in</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to see of the seat count was updated successfully.</description>
+        <name>Was_Seat_Count_Success</name>
+        <label>Was Seat Count Success?</label>
+        <locationX>842</locationX>
+        <locationY>1514</locationY>
+        <defaultConnector>
+            <targetReference>Update_Software_Seat_Count_Failure</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Seat Count Fail</defaultConnectorLabel>
+        <rules>
+            <name>Seat_Count_Success</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Set_Seat_Count.responseCode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>204.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Entitlements</targetReference>
+            </connector>
+            <label>Seat Count Success</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This validates that a software entitlement that matches the ID was really found</description>
+        <name>Was_Software_Entitlement_Found</name>
+        <label>Was Software Entitlement Found?</label>
+        <locationX>1609</locationX>
+        <locationY>350</locationY>
+        <defaultConnector>
+            <targetReference>No_Record_Passed_In_Error</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Record Found</defaultConnectorLabel>
+        <rules>
+            <name>Record_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Software_Entitlement</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Sanity_Check</targetReference>
+            </connector>
+            <label>Record Found</label>
+        </rules>
+    </decisions>
+    <description>This will create a new Software Entitlement Group in Zentitle when this subflow is called. This will make an external callout in an async path to Zentile and then parse/process all of the response info.</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>This forms the customer Zentitle ID to pass to the callout</description>
+        <name>Form_CustomerZentitleId</name>
+        <dataType>String</dataType>
+        <expression>IF({!Customer_Exists}, {!Get_Software_Entitlement.Account__r.Zentitle_Customer_ID__c},{!Create_Zentitle_Customer.Var_New_ZentitleCustomerId})</expression>
+    </formulas>
+    <formulas>
+        <description>This will be true if the date field is completed or false if it is blank.</description>
+        <name>Form_HasMaintenance</name>
+        <dataType>Boolean</dataType>
+        <expression>NOT(ISBLANK(TEXT({!Get_Software_Entitlement.Maintenance_Expiry_Date__c})))</expression>
+    </formulas>
+    <interviewLabel>Software Entitlement: Create New Software Entitlement in Zentitle (Sub-Flow) {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Software Entitlement: Create New Software Entitlement in Zentitle (Sub-Flow)</label>
+    <loops>
+        <description>This will loop over the activation codes for the entitlement that was created.</description>
+        <name>Loop_Through_Activation_Codes</name>
+        <label>Loop Through Activation Codes</label>
+        <locationX>446</locationX>
+        <locationY>2354</locationY>
+        <collectionReference>Zentitle_EntitlementGroupModel.activationCodes</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Build_Entitlement_Activation_Code</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Activation_Codes_to_Create</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <description>This is to extract the entitlement from the entitlement group.</description>
+        <name>Loop_Through_Entitlements</name>
+        <label>Loop Through Entitlements.</label>
+        <locationX>842</locationX>
+        <locationY>998</locationY>
+        <collectionReference>Zentitle_EntitlementGroupModel.entitlements</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Set_Entitlement_ID</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Set_Seat_Count_Body</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <description>This will create the activation codes for the entitlement that were built in the loop.</description>
+        <name>Create_Activation_Codes</name>
+        <label>Create Activation Codes</label>
+        <locationX>314</locationX>
+        <locationY>2870</locationY>
+        <connector>
+            <targetReference>Update_Software_Entitlement_ID_and_Group</targetReference>
+        </connector>
+        <inputReference>Var_Activation_Code_Staging_Collection</inputReference>
+    </recordCreates>
+    <recordCreates>
+        <description>This logs the error in creating the customer in Zentitle as a task on the record.</description>
+        <name>Log_Customer_Creation_Error_as_Task</name>
+        <label>Log Customer Creation Error as Task</label>
+        <locationX>2118</locationX>
+        <locationY>1106</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>The customer failed to create, Error Message: {!$Flow.FaultMessage}{!Create_Zentitle_Customer.Var_ErrorMessage}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Customer Creation Error Occured at {!$Flow.CurrentDate}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <description>This logs the error as a task on the record.</description>
+        <name>Log_Entitlement_Creation_Error_as_Task</name>
+        <label>Log Entitlement Creation Error as Task</label>
+        <locationX>1326</locationX>
+        <locationY>1106</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>Code: {!ResponseCode} Callout Exception: {!DefaultException} Flow Fault Message: {!$Flow.FaultMessage}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Failed To Create Entitlement in Zentitle at {!$Flow.CurrentDate}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <description>This logs the error as a task on the record because the flow ran in a sandbox without a bypass.</description>
+        <name>Log_Entitlement_Creation_In_Sandbox_Error_as_Task</name>
+        <label>Log Entitlement Creation In Sandbox Error as Task</label>
+        <locationX>50</locationX>
+        <locationY>674</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>The Software_Entitlement_Create_New_Software_Entitlement_in_Zentitle_Sub_Flow flow tried to run in a sandbox and the sandbox bypass was not enabled.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>(SANDBOX) Failed To Create Entitlement in Zentitle at {!$Flow.CurrentDate}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <description>This logs the success as a task on the record.</description>
+        <name>Log_Entitlement_Creation_Success_as_Task</name>
+        <label>Log Entitlement Creation Success as Task</label>
+        <locationX>446</locationX>
+        <locationY>3170</locationY>
+        <connector>
+            <targetReference>Set_Success</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>The Software Entitlement Initial Sync to Zentile was Successfuly sent at {!$Flow.CurrentDate}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <description>This logs the error as a task on the record.</description>
+        <name>Log_Entitlement_Seat_Count_Error_as_Task</name>
+        <label>Log Entitlement Seat Count Error as Task</label>
+        <locationX>1062</locationX>
+        <locationY>1730</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>Code: {!Set_Seat_Count.responseCode} Callout Exception: {!Set_Seat_Count.defaultExc} Flow Fault Message: {!$Flow.FaultMessage}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Failed To Update Seat Count in Zentitle at {!$Flow.CurrentDate}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <description>This logs the error as a task on the record.</description>
+        <name>Log_Get_Entitlement_Error_as_Task</name>
+        <label>Log  Get Entitlement Error as Task</label>
+        <locationX>798</locationX>
+        <locationY>1946</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>Code: {!ResponseCode} Callout Exception: {!DefaultException} Flow Fault Message: {!$Flow.FaultMessage}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Failed To Get Entitlement from Zentitle at {!$Flow.CurrentDate}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <description>This logs the error as a task on the record.</description>
+        <name>Log_Parse_Entitlement_Error_as_Task</name>
+        <label>Log Parse Entitlement Error as Task</label>
+        <locationX>534</locationX>
+        <locationY>2162</locationY>
+        <connector>
+            <targetReference>Loop_Through_Activation_Codes</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>The entitlement failed to parse: {!Parse_and_Update_Entitlement_Model.Var_Error_Message}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Failed to Parse Entitlement at {!$Flow.CurrentDate}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <description>This gets the account to pass to the subflow as an account record variable.</description>
+        <name>Get_Account</name>
+        <label>Get Account</label>
+        <locationX>1986</locationX>
+        <locationY>674</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Create_Zentitle_Customer</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Update_Software_Entitlement_Failure</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Software_Entitlement.Account__r.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>This will get the software entitlement for the record.</description>
+        <name>Get_Software_Entitlement</name>
+        <label>Get Software Entitlement</label>
+        <locationX>1609</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Was_Software_Entitlement_Found</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Software_Entitlement__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>This will set the error message in the API field from the get entitlement operation.</description>
+        <name>Set_Get_Entitlement_Failure</name>
+        <label>Set Get Entitlement Failure</label>
+        <locationX>798</locationX>
+        <locationY>1838</locationY>
+        <connector>
+            <targetReference>Log_Get_Entitlement_Error_as_Task</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Integration_Error_Occurred__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Software_Entitlement__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>This will set the error message in the API field from the parse entitlement operation.</description>
+        <name>Set_Parse_Entitlement_Failure</name>
+        <label>Set Parse Entitlement Failure</label>
+        <locationX>534</locationX>
+        <locationY>2054</locationY>
+        <connector>
+            <targetReference>Log_Parse_Entitlement_Error_as_Task</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Integration_Error_Occurred__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Software_Entitlement__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>This will set the error message in the API field from the customer creation</description>
+        <name>Update_Software_Entitlement_Failure</name>
+        <label>Update Software Entitlement Failure</label>
+        <locationX>2118</locationX>
+        <locationY>998</locationY>
+        <connector>
+            <targetReference>Log_Customer_Creation_Error_as_Task</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Integration_Error_Occurred__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Software_Entitlement__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>This will set the error message in the API field from the entitlement creation</description>
+        <name>Update_Software_Entitlement_Failure_Creation</name>
+        <label>Update Software Entitlement Failure Creation</label>
+        <locationX>1326</locationX>
+        <locationY>998</locationY>
+        <connector>
+            <targetReference>Log_Entitlement_Creation_Error_as_Task</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Integration_Error_Occurred__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Software_Entitlement__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>This will set the error message in the API field from the entitlement creation because the org the flow is running in is a sandbox that doesn&apos;t have the bypass enabled.</description>
+        <name>Update_Software_Entitlement_Failure_Creation_Sandbox</name>
+        <label>Update Software Entitlement Failure Creation - Sandbox</label>
+        <locationX>50</locationX>
+        <locationY>566</locationY>
+        <connector>
+            <targetReference>Log_Entitlement_Creation_In_Sandbox_Error_as_Task</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Integration_Error_Occurred__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Software_Entitlement__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>This updates the Software Entitlement With the ID from the API call result</description>
+        <name>Update_Software_Entitlement_ID_and_Group</name>
+        <label>Update Software Entitlement ID and Group</label>
+        <locationX>446</locationX>
+        <locationY>3062</locationY>
+        <connector>
+            <targetReference>Log_Entitlement_Creation_Success_as_Task</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Zentitle_Entitlement_Group_ID__c</field>
+            <value>
+                <elementReference>Zentitle_EntitlementGroupModel.id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Zentitle_Entitlement_ID__c</field>
+            <value>
+                <elementReference>Var_Entitlement_Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Software_Entitlement__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>This will set the error message in the API field from the entitlement seat count update</description>
+        <name>Update_Software_Seat_Count_Failure</name>
+        <label>Update Software Seat Count Failure</label>
+        <locationX>1062</locationX>
+        <locationY>1622</locationY>
+        <connector>
+            <targetReference>Log_Entitlement_Seat_Count_Error_as_Task</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Integration_Error_Occurred__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Software_Entitlement__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>2089</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Was_RecordID_passed_in</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <description>This runs the sub flow to create the zentitle customer</description>
+        <name>Create_Zentitle_Customer</name>
+        <label>Create Zentitle Customer</label>
+        <locationX>1986</locationX>
+        <locationY>782</locationY>
+        <connector>
+            <targetReference>Create_Zentitle_Customer_Result</targetReference>
+        </connector>
+        <flowName>Account_Create_Account_in_Zentitle_as_a_Customer_Sub_Flow</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>Get_Account.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <subflows>
+        <description>This will update and create the entitlements for the software entitlements.</description>
+        <name>Parse_and_Update_Entitlement_Model</name>
+        <label>Parse and Update Entitlement Model</label>
+        <locationX>446</locationX>
+        <locationY>1838</locationY>
+        <connector>
+            <targetReference>Successful_Parse</targetReference>
+        </connector>
+        <flowName>Software_Entitlement_Parse_and_Update_Zentitle_EntitlementModel_Sub_Flow</flowName>
+        <inputAssignments>
+            <name>Var_Software_Entitlement_ID</name>
+            <value>
+                <elementReference>Get_Software_Entitlement.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Zentitle_EntitlementModel</name>
+            <value>
+                <elementReference>ExternalService_Zentitle_EntitlementModel_Output</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <variables>
+        <description>This is the spec default exception</description>
+        <name>DefaultException</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This holds the ExternalService__Zentitle_EntitlementModel that was created so it can be passed to the subflow to be parsed.</description>
+        <name>ExternalService_Zentitle_EntitlementModel_Output</name>
+        <apexClass>ExternalService__Zentitle_EntitlementModel</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>This holds the ExternalService__Zentitle_EntitlementModel that was created so it can be passed to the subflow to be parsed.</description>
+        <name>ExternalService_Zentitle_EntitlementModel_Output_Collection</name>
+        <apexClass>ExternalService__Zentitle_EntitlementModel</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the software entitlement that the flow was launched from.</description>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the callout Response Code</description>
+        <name>ResponseCode</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <description>This holds the activation code that is being built.</description>
+        <name>Var_Activation_Code_Build</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Software_Activation_Code__c</objectType>
+    </variables>
+    <variables>
+        <description>This holds records to create outside of the loop.</description>
+        <name>Var_Activation_Code_Staging_Collection</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Software_Activation_Code__c</objectType>
+    </variables>
+    <variables>
+        <description>This holds entitlement id.</description>
+        <name>Var_Entitlement_Id</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the error message to pass out of the flow</description>
+        <name>Var_ErrorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>This is the success boolean to pass out of the flow</description>
+        <name>Var_Success</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <name>Zentitle_CreateEntitlementApiRequest</name>
+        <apexClass>ExternalService__Zentitle_CreateEntitlementApiRequest</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Zentitle_EntitlementGroupModel</name>
+        <apexClass>ExternalService__Zentitle_EntitlementGroupModel</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the ExternalService__Zentitle_UpdateEntitlementApiRequest body</description>
+        <name>Zentitle_UpdateEntitlementApiRequest</name>
+        <apexClass>ExternalService__Zentitle_UpdateEntitlementApiRequest</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

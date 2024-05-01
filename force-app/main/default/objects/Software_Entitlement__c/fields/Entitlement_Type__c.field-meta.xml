@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Entitlement_Type__c</fullName>
+    <description>This is used to support Entitlement bundles where multiple entitlements can be grouped to create an entitlement bundle stemming from a single offering. This is for future support.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This is for future use with bundles. Currently, the option should be single to have a single entitlement.</inlineHelpText>
+    <label>Entitlement Type</label>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Single</fullName>
+                <default>false</default>
+                <label>Single</label>
+            </value>
+            <value>
+                <fullName>Bundle</fullName>
+                <default>false</default>
+                <label>Bundle</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

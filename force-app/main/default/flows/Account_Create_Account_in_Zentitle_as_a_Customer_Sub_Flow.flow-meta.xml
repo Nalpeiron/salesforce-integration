@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>This makes the callout to create the customer in zentitle</description>
+        <name>Create_Customer</name>
+        <label>Create Customer</label>
+        <locationX>842</locationX>
+        <locationY>566</locationY>
+        <actionName>Zentitle.Customers_Create</actionName>
+        <actionType>externalService</actionType>
+        <connector>
+            <targetReference>Successful_Callout</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Set_Error_Messages_Fault_Path</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>Zentitle_CustomerApiRequest</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Zentitle.Customers_Create</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>59.0</apiVersion>
+    <assignments>
+        <description>This creates the callout body for the API call.</description>
+        <name>Create_Callout_Body</name>
+        <label>Create Callout Body</label>
+        <locationX>842</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>Zentitle_CustomerApiRequest.accountRefId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Salesforce_Account.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Zentitle_CustomerApiRequest.name</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Salesforce_Account.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_Customer</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This sets the error message for the missing account passed in.</description>
+        <name>Set_Error_Message_Account</name>
+        <label>Set Error Message Account</label>
+        <locationX>996</locationX>
+        <locationY>1358</locationY>
+        <assignmentItems>
+            <assignToReference>Var_ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>An Account was not passed in for the recordId</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Success</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This sets the error message for the account passed in since it already has a zentitle customer.</description>
+        <name>Set_Error_Message_Already_Exists</name>
+        <label>Set Error Message Already Exists</label>
+        <locationX>50</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>Var_ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>The Account was not passed in for the recordId already has an EXISTING zentile customer</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Success</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This sets the error message that the flow is in a sandbox</description>
+        <name>Set_Error_Message_Sandbox</name>
+        <label>Set Error Message Sandbox</label>
+        <locationX>314</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>Var_ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>The flow is in a sandbox.</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Success</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This sets the error messages to be outputed</description>
+        <name>Set_Error_Messages</name>
+        <label>Set Error Messages</label>
+        <locationX>1106</locationX>
+        <locationY>782</locationY>
+        <assignmentItems>
+            <assignToReference>Var_ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>An API Error Occured: {!Create_Customer.defaultExc}</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Success</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This sets the error messages to be outputted for the fault path</description>
+        <name>Set_Error_Messages_Fault_Path</name>
+        <label>Set Error Messages Fault Path</label>
+        <locationX>1370</locationX>
+        <locationY>674</locationY>
+        <assignmentItems>
+            <assignToReference>Var_ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Success</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This sets the Success Variable.</description>
+        <name>Set_Success</name>
+        <label>Set Success</label>
+        <locationX>578</locationX>
+        <locationY>890</locationY>
+        <assignmentItems>
+            <assignToReference>Var_Success</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_New_ZentitleCustomerId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Create_Customer.201.id</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <description>This will check proactivly for issues to prevent errors in the API calls</description>
+        <name>Check_For_Issues</name>
+        <label>Check For Issues</label>
+        <locationX>358</locationX>
+        <locationY>350</locationY>
+        <defaultConnector>
+            <targetReference>Create_Callout_Body</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Passed Sanity Check</defaultConnectorLabel>
+        <rules>
+            <name>No_Account_Passed_In</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Salesforce_Account</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Error_Message_Account</targetReference>
+            </connector>
+            <label>No Account Passed In</label>
+        </rules>
+        <rules>
+            <name>Account_Already_in_Zentitle</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Salesforce_Account.Zentitle_Customer_ID__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Error_Message_Already_Exists</targetReference>
+            </connector>
+            <label>Account Already in Zentitle</label>
+        </rules>
+        <rules>
+            <name>Sandbox</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Organization.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>00DG0000000lSeW</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Label.Zentitle_Sandbox_Override</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Error_Message_Sandbox</targetReference>
+            </connector>
+            <label>Sandbox</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to see if it was a successful request.</description>
+        <name>Successful_Callout</name>
+        <label>Successful Callout?</label>
+        <locationX>842</locationX>
+        <locationY>674</locationY>
+        <defaultConnector>
+            <targetReference>Set_Error_Messages</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Failure</defaultConnectorLabel>
+        <rules>
+            <name>Successful</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Create_Customer.responseCode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>201.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Account_With_Zentitle_Customer_ID</targetReference>
+            </connector>
+            <label>Successful</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This checks to see that a record was passed in successfully.</description>
+        <name>Was_Record_Passed_In</name>
+        <label>Was Record Passed In?</label>
+        <locationX>996</locationX>
+        <locationY>134</locationY>
+        <defaultConnector>
+            <targetReference>Set_Error_Message_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Record Missing</defaultConnectorLabel>
+        <rules>
+            <name>Recored_Passed_In</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Salesforce_Account</targetReference>
+            </connector>
+            <label>Recored Passed In</label>
+        </rules>
+    </decisions>
+    <description>This flow should be called to create the customer in zentitle. This flow MUST have the account record passed in to function.</description>
+    <environments>Default</environments>
+    <interviewLabel>BACA Z {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Account: Create Account in Zentitle as a Customer (Sub-Flow)</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>This gets the salesforce account that was passed in to use in the flow.</description>
+        <name>Get_Salesforce_Account</name>
+        <label>Get Salesforce Account</label>
+        <locationX>358</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_For_Issues</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>This saves the zentitle customer ID on the account</description>
+        <name>Update_Account_With_Zentitle_Customer_ID</name>
+        <label>Update Account With Zentitle Customer ID</label>
+        <locationX>578</locationX>
+        <locationY>782</locationY>
+        <connector>
+            <targetReference>Set_Success</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Set_Error_Messages_Fault_Path</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Salesforce_Account.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Zentitle_Customer_ID__c</field>
+            <value>
+                <elementReference>Create_Customer.201.id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Account</object>
+    </recordUpdates>
+    <start>
+        <locationX>870</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Was_Record_Passed_In</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>This is the account Id that should be passed in to the flow</description>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This holds the error message if there is one.</description>
+        <name>Var_ErrorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>This holds the new customer ID to pass out of the flow.</description>
+        <name>Var_New_ZentitleCustomerId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>This will be TRUE if it was a success.</description>
+        <name>Var_Success</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>This holds the body of the api request.</description>
+        <name>Zentitle_CustomerApiRequest</name>
+        <apexClass>ExternalService__Zentitle_CustomerApiRequest</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

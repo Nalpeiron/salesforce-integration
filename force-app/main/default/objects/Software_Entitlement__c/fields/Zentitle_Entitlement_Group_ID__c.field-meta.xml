@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Zentitle_Entitlement_Group_ID__c</fullName>
+    <caseSensitive>true</caseSensitive>
+    <description>This stores the entitlement group id, this will be populated for both single and bundles.</description>
+    <externalId>true</externalId>
+    <inlineHelpText>This is the external ID that correlates to the ID of the entitlement group stored in Zentitle.</inlineHelpText>
+    <label>Zentitle Entitlement Group ID</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Maintenance_Expiry_Date__c</fullName>
+    <description>This is used to push into the &quot;maintenanceExpiryDate&quot; in Zentitle, and will set &quot;hasMaintenance&quot; to TRUE when populated and FALSE when blank/</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This field should be populated if there is a Maintenance Expiry that should be used for the software entitlement; if left blank, the Software Entitlement will be set not to have a Maintenance that expires.</inlineHelpText>
+    <label>Maintenance Expiry Date</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>
