@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Zentitle_Validation</fullName>
+    <active>false</active>
+    <description>This rule prevents changes when there is a Zentitle Customer ID attached to the account to prevent errors.</description>
+    <errorConditionFormula>AND(
+ISCHANGED(Zentitle_Customer_ID__c),
+NOT(ISBLANK(PRIORVALUE(Zentitle_Customer_ID__c)))
+)</errorConditionFormula>
+    <errorMessage>You cannot change the Zentitle Customer ID once it has been set.</errorMessage>
+</ValidationRule>
