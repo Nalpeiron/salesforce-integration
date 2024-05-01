@@ -11,7 +11,8 @@ public class UpsertRecordsActionTest {
         
 // Create an Account to link with Software_Entitlement
         Account testAccount = new Account(
-            Name = 'Test Account'
+            Name = 'Test Account',
+            Zentitle_Customer_ID__c = 'Test'
         );
         insert testAccount;
         
@@ -60,7 +61,8 @@ public class UpsertRecordsActionTest {
         
 // Create an Account to link with Software_Entitlement
         Account testAccount = new Account(
-            Name = 'Test Account'
+            Name = 'Test Account',
+            Zentitle_Customer_ID__c = 'Test'
         );
         insert testAccount;
         
