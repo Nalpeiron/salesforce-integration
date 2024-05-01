@@ -3,7 +3,7 @@
 
 Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started
 
-## Instalation 
+## Installation 
 <a href="https://githubsfdeploy.herokuapp.com?owner=Nalpeiron&repo=salesforce-integration&ref=main">
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
