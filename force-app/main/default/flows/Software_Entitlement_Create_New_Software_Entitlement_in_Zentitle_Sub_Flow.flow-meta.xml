@@ -5,7 +5,7 @@
         <name>Create_Entitlement_Callout</name>
         <label>Create Entitlement Callout</label>
         <locationX>1084</locationX>
-        <locationY>782</locationY>
+        <locationY>890</locationY>
         <actionName>Zentitle.Entitlements_Create</actionName>
         <actionType>externalService</actionType>
         <connector>
@@ -42,7 +42,7 @@
         <name>Get_Entitlements</name>
         <label>Get Entitlements</label>
         <locationX>622</locationX>
-        <locationY>1622</locationY>
+        <locationY>1730</locationY>
         <actionName>Zentitle.Entitlements_Get</actionName>
         <actionType>externalService</actionType>
         <connector>
@@ -81,7 +81,7 @@
         <name>Set_Seat_Count</name>
         <label>Set Seat Count</label>
         <locationX>842</locationX>
-        <locationY>1406</locationY>
+        <locationY>1514</locationY>
         <actionName>Zentitle.Entitlements_Update</actionName>
         <actionType>externalService</actionType>
         <connector>
@@ -110,7 +110,7 @@
         <name>Add_Activation_Code_To_Staging_Collection</name>
         <label>Add Activation Code To Staging Collection</label>
         <locationX>534</locationX>
-        <locationY>2570</locationY>
+        <locationY>2678</locationY>
         <assignmentItems>
             <assignToReference>Var_Activation_Code_Staging_Collection</assignToReference>
             <operator>Add</operator>
@@ -127,7 +127,7 @@
         <name>Build_Entitlement_Activation_Code</name>
         <label>Build Entitlement Activation Code</label>
         <locationX>534</locationX>
-        <locationY>2462</locationY>
+        <locationY>2570</locationY>
         <assignmentItems>
             <assignToReference>Var_Activation_Code_Build.Software_Entitlement__c</assignToReference>
             <operator>Assign</operator>
@@ -150,8 +150,8 @@
         <description>This sets the error for no record being passed in</description>
         <name>No_Record_Passed_In_Error</name>
         <label>No Record Passed In Error</label>
-        <locationX>2215</locationX>
-        <locationY>4082</locationY>
+        <locationX>2545</locationX>
+        <locationY>4190</locationY>
         <assignmentItems>
             <assignToReference>Var_ErrorMessage</assignToReference>
             <operator>Assign</operator>
@@ -172,7 +172,7 @@
         <name>Set_API_Request_Body_Values</name>
         <label>Set API Request Body Values</label>
         <locationX>1084</locationX>
-        <locationY>674</locationY>
+        <locationY>782</locationY>
         <assignmentItems>
             <assignToReference>Zentitle_CreateEntitlementApiRequest.customerId</assignToReference>
             <operator>Assign</operator>
@@ -203,7 +203,7 @@
         <name>Set_Entitlement_ID</name>
         <label>Set Entitlement ID</label>
         <locationX>930</locationX>
-        <locationY>1106</locationY>
+        <locationY>1214</locationY>
         <assignmentItems>
             <assignToReference>Var_Entitlement_Id</assignToReference>
             <operator>Assign</operator>
@@ -216,11 +216,32 @@
         </connector>
     </assignments>
     <assignments>
+        <description>This sets the error when the org is not found.</description>
+        <name>Set_Org_Error</name>
+        <label>Set Org Error</label>
+        <locationX>3086</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>Var_ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>A valid Org Was Not Found: {!$Flow.FaultMessage}</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Var_Success</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
         <description>This builds the body for the api request.</description>
         <name>Set_Seat_Count_Body</name>
         <label>Set Seat Count Body</label>
         <locationX>842</locationX>
-        <locationY>1298</locationY>
+        <locationY>1406</locationY>
         <assignmentItems>
             <assignToReference>Zentitle_UpdateEntitlementApiRequest.seatCount</assignToReference>
             <operator>Assign</operator>
@@ -251,7 +272,7 @@
         <name>Set_Success</name>
         <label>Set Success</label>
         <locationX>446</locationX>
-        <locationY>3278</locationY>
+        <locationY>3386</locationY>
         <assignmentItems>
             <assignToReference>Var_Success</assignToReference>
             <operator>Assign</operator>
@@ -265,7 +286,7 @@
         <name>Activation_Codes_to_Create</name>
         <label>Activation Codes to Create?</label>
         <locationX>446</locationX>
-        <locationY>2762</locationY>
+        <locationY>2870</locationY>
         <defaultConnector>
             <targetReference>Update_Software_Entitlement_ID_and_Group</targetReference>
         </defaultConnector>
@@ -291,7 +312,7 @@
         <name>Check_Outcome_of_API_call</name>
         <label>Check Outcome of API call</label>
         <locationX>1084</locationX>
-        <locationY>890</locationY>
+        <locationY>998</locationY>
         <defaultConnector>
             <targetReference>Update_Software_Entitlement_Failure_Creation</targetReference>
         </defaultConnector>
@@ -317,7 +338,7 @@
         <name>Create_Zentitle_Customer_Result</name>
         <label>Create Zentitle Customer Result</label>
         <locationX>1986</locationX>
-        <locationY>890</locationY>
+        <locationY>998</locationY>
         <defaultConnector>
             <targetReference>Update_Software_Entitlement_Failure</targetReference>
         </defaultConnector>
@@ -344,7 +365,7 @@
         <name>Does_Zentitle_Customer_Exist</name>
         <label>Does Zentitle Customer Exist?</label>
         <locationX>1535</locationX>
-        <locationY>566</locationY>
+        <locationY>674</locationY>
         <defaultConnector>
             <targetReference>Get_Account</targetReference>
         </defaultConnector>
@@ -370,7 +391,7 @@
         <name>Sanity_Check</name>
         <label>Sanity Check</label>
         <locationX>572</locationX>
-        <locationY>458</locationY>
+        <locationY>566</locationY>
         <defaultConnector>
             <targetReference>Does_Zentitle_Customer_Exist</targetReference>
         </defaultConnector>
@@ -406,15 +427,15 @@
             <name>Sandbox_Check</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Organization.Id</leftValueReference>
+                <leftValueReference>$Label.Zentitle_Sandbox_Override</leftValueReference>
                 <operator>NotEqualTo</operator>
                 <rightValue>
-                    <stringValue>00DG0000000lSeW</stringValue>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Label.Zentitle_Sandbox_Override</leftValueReference>
-                <operator>NotEqualTo</operator>
+                <leftValueReference>Get_Current_Org.IsSandbox</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
@@ -430,7 +451,7 @@
         <name>Successful_Parse</name>
         <label>Successful Parse?</label>
         <locationX>446</locationX>
-        <locationY>1946</locationY>
+        <locationY>2054</locationY>
         <defaultConnector>
             <targetReference>Set_Parse_Entitlement_Failure</targetReference>
         </defaultConnector>
@@ -456,7 +477,7 @@
         <name>Was_Get_Entitlement_Success</name>
         <label>Was Get Entitlement Success?</label>
         <locationX>622</locationX>
-        <locationY>1730</locationY>
+        <locationY>1838</locationY>
         <defaultConnector>
             <targetReference>Set_Get_Entitlement_Failure</targetReference>
         </defaultConnector>
@@ -481,12 +502,12 @@
         <description>This checks to see if a record ID was passed into the flow</description>
         <name>Was_RecordID_passed_in</name>
         <label>Was RecordID passed in?</label>
-        <locationX>2215</locationX>
+        <locationX>2545</locationX>
         <locationY>134</locationY>
         <defaultConnector>
             <targetReference>No_Record_Passed_In_Error</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <defaultConnectorLabel>No Record ID Passed In</defaultConnectorLabel>
         <rules>
             <name>RecordID_passed_in</name>
             <conditionLogic>and</conditionLogic>
@@ -508,7 +529,7 @@
         <name>Was_Seat_Count_Success</name>
         <label>Was Seat Count Success?</label>
         <locationX>842</locationX>
-        <locationY>1514</locationY>
+        <locationY>1622</locationY>
         <defaultConnector>
             <targetReference>Update_Software_Seat_Count_Failure</targetReference>
         </defaultConnector>
@@ -533,7 +554,7 @@
         <description>This validates that a software entitlement that matches the ID was really found</description>
         <name>Was_Software_Entitlement_Found</name>
         <label>Was Software Entitlement Found?</label>
-        <locationX>1609</locationX>
+        <locationX>1741</locationX>
         <locationY>350</locationY>
         <defaultConnector>
             <targetReference>No_Record_Passed_In_Error</targetReference>
@@ -550,7 +571,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Sanity_Check</targetReference>
+                <targetReference>Get_Current_Org</targetReference>
             </connector>
             <label>Record Found</label>
         </rules>
@@ -576,7 +597,7 @@
         <name>Loop_Through_Activation_Codes</name>
         <label>Loop Through Activation Codes</label>
         <locationX>446</locationX>
-        <locationY>2354</locationY>
+        <locationY>2462</locationY>
         <collectionReference>Zentitle_EntitlementGroupModel.activationCodes</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -591,7 +612,7 @@
         <name>Loop_Through_Entitlements</name>
         <label>Loop Through Entitlements.</label>
         <locationX>842</locationX>
-        <locationY>998</locationY>
+        <locationY>1106</locationY>
         <collectionReference>Zentitle_EntitlementGroupModel.entitlements</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -625,7 +646,7 @@
         <name>Create_Activation_Codes</name>
         <label>Create Activation Codes</label>
         <locationX>314</locationX>
-        <locationY>2870</locationY>
+        <locationY>2978</locationY>
         <connector>
             <targetReference>Update_Software_Entitlement_ID_and_Group</targetReference>
         </connector>
@@ -636,7 +657,7 @@
         <name>Log_Customer_Creation_Error_as_Task</name>
         <label>Log Customer Creation Error as Task</label>
         <locationX>2118</locationX>
-        <locationY>1106</locationY>
+        <locationY>1214</locationY>
         <inputAssignments>
             <field>ActivityDate</field>
             <value>
@@ -675,7 +696,7 @@
         <name>Log_Entitlement_Creation_Error_as_Task</name>
         <label>Log Entitlement Creation Error as Task</label>
         <locationX>1326</locationX>
-        <locationY>1106</locationY>
+        <locationY>1214</locationY>
         <inputAssignments>
             <field>ActivityDate</field>
             <value>
@@ -714,7 +735,7 @@
         <name>Log_Entitlement_Creation_In_Sandbox_Error_as_Task</name>
         <label>Log Entitlement Creation In Sandbox Error as Task</label>
         <locationX>50</locationX>
-        <locationY>674</locationY>
+        <locationY>782</locationY>
         <inputAssignments>
             <field>ActivityDate</field>
             <value>
@@ -753,7 +774,7 @@
         <name>Log_Entitlement_Creation_Success_as_Task</name>
         <label>Log Entitlement Creation Success as Task</label>
         <locationX>446</locationX>
-        <locationY>3170</locationY>
+        <locationY>3278</locationY>
         <connector>
             <targetReference>Set_Success</targetReference>
         </connector>
@@ -789,7 +810,7 @@
         <name>Log_Entitlement_Seat_Count_Error_as_Task</name>
         <label>Log Entitlement Seat Count Error as Task</label>
         <locationX>1062</locationX>
-        <locationY>1730</locationY>
+        <locationY>1838</locationY>
         <inputAssignments>
             <field>ActivityDate</field>
             <value>
@@ -828,7 +849,7 @@
         <name>Log_Get_Entitlement_Error_as_Task</name>
         <label>Log  Get Entitlement Error as Task</label>
         <locationX>798</locationX>
-        <locationY>1946</locationY>
+        <locationY>2054</locationY>
         <inputAssignments>
             <field>ActivityDate</field>
             <value>
@@ -867,7 +888,7 @@
         <name>Log_Parse_Entitlement_Error_as_Task</name>
         <label>Log Parse Entitlement Error as Task</label>
         <locationX>534</locationX>
-        <locationY>2162</locationY>
+        <locationY>2270</locationY>
         <connector>
             <targetReference>Loop_Through_Activation_Codes</targetReference>
         </connector>
@@ -909,7 +930,7 @@
         <name>Get_Account</name>
         <label>Get Account</label>
         <locationX>1986</locationX>
-        <locationY>674</locationY>
+        <locationY>782</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Create_Zentitle_Customer</targetReference>
@@ -931,15 +952,40 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <description>This will get the Organization so we can use it to check if this is a sandbox or not.</description>
+        <name>Get_Current_Org</name>
+        <label>Get Current Org</label>
+        <locationX>572</locationX>
+        <locationY>458</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Sanity_Check</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Organization.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Organization</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <description>This will get the software entitlement for the record.</description>
         <name>Get_Software_Entitlement</name>
         <label>Get Software Entitlement</label>
-        <locationX>1609</locationX>
+        <locationX>1741</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Was_Software_Entitlement_Found</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Set_Org_Error</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -957,7 +1003,7 @@
         <name>Set_Get_Entitlement_Failure</name>
         <label>Set Get Entitlement Failure</label>
         <locationX>798</locationX>
-        <locationY>1838</locationY>
+        <locationY>1946</locationY>
         <connector>
             <targetReference>Log_Get_Entitlement_Error_as_Task</targetReference>
         </connector>
@@ -982,7 +1028,7 @@
         <name>Set_Parse_Entitlement_Failure</name>
         <label>Set Parse Entitlement Failure</label>
         <locationX>534</locationX>
-        <locationY>2054</locationY>
+        <locationY>2162</locationY>
         <connector>
             <targetReference>Log_Parse_Entitlement_Error_as_Task</targetReference>
         </connector>
@@ -1007,7 +1053,7 @@
         <name>Update_Software_Entitlement_Failure</name>
         <label>Update Software Entitlement Failure</label>
         <locationX>2118</locationX>
-        <locationY>998</locationY>
+        <locationY>1106</locationY>
         <connector>
             <targetReference>Log_Customer_Creation_Error_as_Task</targetReference>
         </connector>
@@ -1032,7 +1078,7 @@
         <name>Update_Software_Entitlement_Failure_Creation</name>
         <label>Update Software Entitlement Failure Creation</label>
         <locationX>1326</locationX>
-        <locationY>998</locationY>
+        <locationY>1106</locationY>
         <connector>
             <targetReference>Log_Entitlement_Creation_Error_as_Task</targetReference>
         </connector>
@@ -1057,7 +1103,7 @@
         <name>Update_Software_Entitlement_Failure_Creation_Sandbox</name>
         <label>Update Software Entitlement Failure Creation - Sandbox</label>
         <locationX>50</locationX>
-        <locationY>566</locationY>
+        <locationY>674</locationY>
         <connector>
             <targetReference>Log_Entitlement_Creation_In_Sandbox_Error_as_Task</targetReference>
         </connector>
@@ -1082,7 +1128,7 @@
         <name>Update_Software_Entitlement_ID_and_Group</name>
         <label>Update Software Entitlement ID and Group</label>
         <locationX>446</locationX>
-        <locationY>3062</locationY>
+        <locationY>3170</locationY>
         <connector>
             <targetReference>Log_Entitlement_Creation_Success_as_Task</targetReference>
         </connector>
@@ -1113,7 +1159,7 @@
         <name>Update_Software_Seat_Count_Failure</name>
         <label>Update Software Seat Count Failure</label>
         <locationX>1062</locationX>
-        <locationY>1622</locationY>
+        <locationY>1730</locationY>
         <connector>
             <targetReference>Log_Entitlement_Seat_Count_Error_as_Task</targetReference>
         </connector>
@@ -1134,7 +1180,7 @@
         <object>Software_Entitlement__c</object>
     </recordUpdates>
     <start>
-        <locationX>2089</locationX>
+        <locationX>2419</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Was_RecordID_passed_in</targetReference>
@@ -1146,7 +1192,7 @@
         <name>Create_Zentitle_Customer</name>
         <label>Create Zentitle Customer</label>
         <locationX>1986</locationX>
-        <locationY>782</locationY>
+        <locationY>890</locationY>
         <connector>
             <targetReference>Create_Zentitle_Customer_Result</targetReference>
         </connector>
@@ -1164,7 +1210,7 @@
         <name>Parse_and_Update_Entitlement_Model</name>
         <label>Parse and Update Entitlement Model</label>
         <locationX>446</locationX>
-        <locationY>1838</locationY>
+        <locationY>1946</locationY>
         <connector>
             <targetReference>Successful_Parse</targetReference>
         </connector>

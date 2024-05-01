@@ -4,7 +4,7 @@
         <fullName>Zentitle_Sandbox_Override</fullName>
         <language>en_US</language>
         <protected>false</protected>
-        <shortDescription>Zentitle Sandbox Override</shortDescription>
-        <value>TRUE</value>
+        <shortDescription>Zentitle Sandbox Override (This should always be FALSE in production)</shortDescription>
+        <value>FALSE</value>
     </labels>
 </CustomLabels>
