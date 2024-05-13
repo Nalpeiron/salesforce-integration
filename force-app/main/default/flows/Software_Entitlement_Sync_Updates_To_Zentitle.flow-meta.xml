@@ -142,9 +142,16 @@
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
-        <filterLogic>and</filterLogic>
+        <filterLogic>or</filterLogic>
         <filters>
             <field>Entitlement_Seat_Count__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Maintenance_Expiry_Date__c</field>
             <operator>IsChanged</operator>
             <value>
                 <booleanValue>true</booleanValue>
