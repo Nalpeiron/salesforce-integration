@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Software_Feature_External_ID__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description>This was created to be used as a unique identifier for updating the features to Salesforce. This is used by the flows that sync to and from Zentitle. The format is the Zentitle ID + - + Software Feature ID. IE: &quot;a578C000000H9e2QAC-atr_8dhDJyCfOU6NrcH2mTei3g&quot;</description>
+    <externalId>true</externalId>
+    <inlineHelpText>This is the Software Entitlement ID appended with the Software Feature ID</inlineHelpText>
+    <label>Software Feature External ID</label>
+    <length>255</length>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

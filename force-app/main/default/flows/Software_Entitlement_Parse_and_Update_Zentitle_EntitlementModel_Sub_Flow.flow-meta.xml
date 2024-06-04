@@ -5,11 +5,11 @@
         <name>Upsert_Attributes</name>
         <label>Upsert Attributes</label>
         <locationX>50</locationX>
-        <locationY>758</locationY>
+        <locationY>458</locationY>
         <actionName>UpsertRecordsAction</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Loop_Through_Features</targetReference>
+            <targetReference>Transform_Entitlement_To_Features</targetReference>
         </connector>
         <dataTypeMappings>
             <typeName>T__records</typeName>
@@ -26,13 +26,13 @@
         <inputParameters>
             <name>externalIDField</name>
             <value>
-                <stringValue>Zentitle_Attribute_ID__c</stringValue>
+                <stringValue>Software_Attribute_External_ID__c</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>records</name>
             <value>
-                <elementReference>Var_Zentitle_Attribute_Collection</elementReference>
+                <elementReference>Transform_Entitlement_To_Attributes</elementReference>
             </value>
         </inputParameters>
         <nameSegment>UpsertRecordsAction</nameSegment>
@@ -44,7 +44,7 @@
         <name>Upsert_Features</name>
         <label>Upsert Feature</label>
         <locationX>50</locationX>
-        <locationY>1706</locationY>
+        <locationY>1106</locationY>
         <actionName>UpsertRecordsAction</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -65,157 +65,26 @@
         <inputParameters>
             <name>externalIDField</name>
             <value>
-                <stringValue>Zentitle_Feature_ID__c</stringValue>
+                <stringValue>Software_Feature_External_ID__c</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>records</name>
             <value>
-                <elementReference>Var_Features_Staging_Collection</elementReference>
+                <elementReference>Transform_Entitlement_To_Features</elementReference>
             </value>
         </inputParameters>
         <nameSegment>UpsertRecordsAction</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
         <versionSegment>1</versionSegment>
     </actionCalls>
-    <apiVersion>59.0</apiVersion>
-    <assignments>
-        <description>This adds the attribute to the collection to update outside of the loop</description>
-        <name>Add_Attributes_To_Collection</name>
-        <label>Add Attributes To Collection</label>
-        <locationX>402</locationX>
-        <locationY>458</locationY>
-        <assignmentItems>
-            <assignToReference>Var_Zentitle_Attribute_Collection</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>Var_Software_Attribute_Build</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Loop_Through_Attributes</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <description>This will add the feature to the collection to be created outside of the loop</description>
-        <name>Add_Feature_To_Collection</name>
-        <label>Add Feature To Collection</label>
-        <locationX>402</locationX>
-        <locationY>1406</locationY>
-        <assignmentItems>
-            <assignToReference>Var_Features_Staging_Collection</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>Var_Features_Build</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Loop_Through_Features</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <description>This will build the features to create outside of the loop</description>
-        <name>Build</name>
-        <label>Build Features</label>
-        <locationX>402</locationX>
-        <locationY>1298</locationY>
-        <assignmentItems>
-            <assignToReference>Var_Features_Build.Software_Entitlement__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Var_Software_Entitlement_ID</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>Var_Features_Build.Feature_Key__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Through_Features.key</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>Var_Features_Build.Feature_Value__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Through_Features.value</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>Var_Features_Build.Feature_Used__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Through_Features.used</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>Var_Features_Build.Feature_Type__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Through_Features.z0type.oneOfString</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>Var_Features_Build.Zentitle_Feature_ID__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Through_Features.id</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Add_Feature_To_Collection</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <description>This will build the attributes to create outside of the loop</description>
-        <name>Build_Attributes</name>
-        <label>Build Attributes</label>
-        <locationX>402</locationX>
-        <locationY>350</locationY>
-        <assignmentItems>
-            <assignToReference>Var_Software_Attribute_Build.Zentitle_Attribute_ID__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Through_Attributes.id</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>Var_Software_Attribute_Build.Attribute_Key__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Through_Attributes.key</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>Var_Software_Attribute_Build.Attribute_Type__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Through_Attributes.z0type.oneOfString</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>Var_Software_Attribute_Build.Software_Entitlement__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Var_Software_Entitlement_ID</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>Var_Software_Attribute_Build.Attribute_Value__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Through_Attributes.value</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Add_Attributes_To_Collection</targetReference>
-        </connector>
-    </assignments>
+    <apiVersion>60.0</apiVersion>
     <assignments>
         <description>This passes the upsert error from the attributes upsert</description>
         <name>Set_Error_Message_Attributes_Upsert</name>
         <label>Set Error Message Attributes Upsert</label>
         <locationX>314</locationX>
-        <locationY>866</locationY>
+        <locationY>566</locationY>
         <assignmentItems>
             <assignToReference>Var_Error_Message</assignToReference>
             <operator>Assign</operator>
@@ -229,7 +98,7 @@
         <name>Set_Error_Message_Feature_Upsert</name>
         <label>Set Error Message Feature Upsert</label>
         <locationX>314</locationX>
-        <locationY>1814</locationY>
+        <locationY>1214</locationY>
         <assignmentItems>
             <assignToReference>Var_Error_Message</assignToReference>
             <operator>Assign</operator>
@@ -243,7 +112,7 @@
         <name>Set_Error_Message_Record_Passed_In</name>
         <label>Set Error Message Record Passed In</label>
         <locationX>314</locationX>
-        <locationY>2438</locationY>
+        <locationY>1838</locationY>
         <assignmentItems>
             <assignToReference>Var_Error_Message</assignToReference>
             <operator>Assign</operator>
@@ -257,7 +126,7 @@
         <name>Set_Success_To_True</name>
         <label>Set Success To True</label>
         <locationX>314</locationX>
-        <locationY>2138</locationY>
+        <locationY>1538</locationY>
         <assignmentItems>
             <assignToReference>Var_Success</assignToReference>
             <operator>Assign</operator>
@@ -271,17 +140,17 @@
         <name>Attributes_To_Create</name>
         <label>Attributes To Create?</label>
         <locationX>314</locationX>
-        <locationY>650</locationY>
+        <locationY>350</locationY>
         <defaultConnector>
-            <targetReference>Loop_Through_Features</targetReference>
+            <targetReference>Transform_Entitlement_To_Features</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No Records Staged</defaultConnectorLabel>
         <rules>
             <name>Attributes_Are_Staged</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Var_Zentitle_Attribute_Collection</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>Transform_Entitlement_To_Attributes</leftValueReference>
+                <operator>IsEmpty</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
@@ -297,7 +166,7 @@
         <name>Features_To_Create</name>
         <label>Features To Create?</label>
         <locationX>314</locationX>
-        <locationY>1598</locationY>
+        <locationY>998</locationY>
         <defaultConnector>
             <targetReference>Set_Success_To_True</targetReference>
         </defaultConnector>
@@ -306,8 +175,8 @@
             <name>Features_Are_Staged</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Var_Features_Staging_Collection</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>Transform_Entitlement_To_Features</leftValueReference>
+                <operator>IsEmpty</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
@@ -354,7 +223,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Loop_Through_Attributes</targetReference>
+                <targetReference>Transform_Entitlement_To_Attributes</targetReference>
             </connector>
             <label>Zentitle_EntitlementModel Passed in</label>
         </rules>
@@ -363,36 +232,6 @@
     <environments>Default</environments>
     <interviewLabel>Software Entitlement: Parse and Update Zentitle EntitlementModel {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Software Entitlement: Parse and Update Zentitle EntitlementModel (Sub-Flow)</label>
-    <loops>
-        <description>This will loop through the attributes and build them to upsert</description>
-        <name>Loop_Through_Attributes</name>
-        <label>Loop Through Attributes</label>
-        <locationX>314</locationX>
-        <locationY>242</locationY>
-        <collectionReference>Zentitle_EntitlementModel.attributes</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>Build_Attributes</targetReference>
-        </nextValueConnector>
-        <noMoreValuesConnector>
-            <targetReference>Attributes_To_Create</targetReference>
-        </noMoreValuesConnector>
-    </loops>
-    <loops>
-        <description>This will loop through features.</description>
-        <name>Loop_Through_Features</name>
-        <label>Loop Through Features</label>
-        <locationX>314</locationX>
-        <locationY>1190</locationY>
-        <collectionReference>Zentitle_EntitlementModel.features</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>Build</targetReference>
-        </nextValueConnector>
-        <noMoreValuesConnector>
-            <targetReference>Features_To_Create</targetReference>
-        </noMoreValuesConnector>
-    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -420,6 +259,131 @@
         </connector>
     </start>
     <status>Active</status>
+    <transforms>
+        <description>This will take the entitlement and turn it into a collection of attributes to save into Salesforce as records.</description>
+        <name>Transform_Entitlement_To_Attributes</name>
+        <label>Transform Entitlement To Attributes</label>
+        <locationX>314</locationX>
+        <locationY>242</locationY>
+        <connector>
+            <targetReference>Attributes_To_Create</targetReference>
+        </connector>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <objectType>Software_Attribute__c</objectType>
+        <scale>0</scale>
+        <transformValues>
+            <transformValueActions>
+                <outputFieldApiName>Zentitle_Attribute_ID__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Zentitle_EntitlementModel.attributes[$EachItem].id</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Attribute_Key__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Zentitle_EntitlementModel.attributes[$EachItem].key</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Attribute_Value__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Zentitle_EntitlementModel.attributes[$EachItem].value</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Attribute_Type__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Zentitle_EntitlementModel.attributes[$EachItem].z0type.oneOfString</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Software_Entitlement__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Var_Software_Entitlement_ID</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Software_Attribute_External_ID__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <formulaDataType>String</formulaDataType>
+                    <formulaExpression>{!Var_Software_Entitlement_ID}+&quot;-&quot;+{!Zentitle_EntitlementModel.attributes[$EachItem].id}</formulaExpression>
+                </value>
+            </transformValueActions>
+        </transformValues>
+    </transforms>
+    <transforms>
+        <description>This will take the entitlement and turn it into a collection of features to save into Salesforce as records.</description>
+        <name>Transform_Entitlement_To_Features</name>
+        <label>Transform Entitlement To Features</label>
+        <locationX>314</locationX>
+        <locationY>890</locationY>
+        <connector>
+            <targetReference>Features_To_Create</targetReference>
+        </connector>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <objectType>Software_Feature__c</objectType>
+        <scale>0</scale>
+        <transformValues>
+            <transformValueActions>
+                <outputFieldApiName>Feature_Key__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Zentitle_EntitlementModel.features[$EachItem].key</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Feature_Used__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Zentitle_EntitlementModel.features[$EachItem].used</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Feature_Value__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Zentitle_EntitlementModel.features[$EachItem].value</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Feature_Type__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Zentitle_EntitlementModel.features[$EachItem].z0type.oneOfString</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Zentitle_Feature_ID__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Zentitle_EntitlementModel.features[$EachItem].id</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Software_Feature_External_ID__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <formulaDataType>String</formulaDataType>
+                    <formulaExpression>{!Var_Software_Entitlement_ID}+&quot;-&quot;+{!Zentitle_EntitlementModel.features[$EachItem].id}</formulaExpression>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Software_Entitlement__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Var_Software_Entitlement_ID</elementReference>
+                </value>
+            </transformValueActions>
+        </transformValues>
+    </transforms>
     <variables>
         <description>This holds the error message when a fault occurs.</description>
         <name>Var_Error_Message</name>
@@ -427,33 +391,6 @@
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <description>This is the build variable used to build the record to create outside of the loop.</description>
-        <name>Var_Features_Build</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Software_Feature__c</objectType>
-    </variables>
-    <variables>
-        <description>This holds the features that will be created outside of the loop</description>
-        <name>Var_Features_Staging_Collection</name>
-        <dataType>SObject</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Software_Feature__c</objectType>
-    </variables>
-    <variables>
-        <description>This holds the attribute that is being built in the loop.</description>
-        <name>Var_Software_Attribute_Build</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Software_Attribute__c</objectType>
     </variables>
     <variables>
         <description>This is the software entitlement record ID that needs to be passed in</description>
@@ -473,15 +410,6 @@
         <value>
             <booleanValue>false</booleanValue>
         </value>
-    </variables>
-    <variables>
-        <description>This holds the collection of attributes to update or insert</description>
-        <name>Var_Zentitle_Attribute_Collection</name>
-        <dataType>SObject</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Software_Attribute__c</objectType>
     </variables>
     <variables>
         <description>This is the input variable for the entitlement model to parse and update the record</description>
