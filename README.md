@@ -2,7 +2,7 @@
 # Salesforce - Zentitle Integration: Next Steps
 
 ## Installation 
-<a href="https://githubsfdeploy.herokuapp.com?owner=Nalpeiron&repo=salesforce-integration&ref=main">
+<a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04taj0000004Ha9">
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
