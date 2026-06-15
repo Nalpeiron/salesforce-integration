@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Customer_Portal_URL__c</fullName>
+    <fullName>Activation_Date__c</fullName>
     <externalId>false</externalId>
-    <label>Customer Portal URL</label>
+    <label>Activation Date</label>
     <required>false</required>
     <trackTrending>false</trackTrending>
-    <type>Url</type>
+    <type>Date</type>
 </CustomField>

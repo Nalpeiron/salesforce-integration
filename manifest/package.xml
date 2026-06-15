@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+
+    <!-- Apex Classes -->
+    <types>
+        <members>UpsertRecordsAction</members>
+        <members>UpsertRecordsActionTest</members>
+        <name>ApexClass</name>
+    </types>
+
+    <!-- Custom Objects -->
+    <types>
+        <members>Software_Entitlement__c</members>
+        <members>Software_Activation__c</members>
+        <members>Software_Activation_Code__c</members>
+        <members>Software_Attribute__c</members>
+        <members>Software_Feature__c</members>
+        <members>Z2Entitlement__c</members>
+        <members>Flow_Personal_Configuration__c</members>
+        <members>FlowTableViewDefinition__c</members>
+        <name>CustomObject</name>
+    </types>
+
+    <!-- Custom Fields (wildcard pulls all fields on each object) -->
+    <types>
+        <members>Software_Entitlement__c.*</members>
+        <members>Software_Activation__c.*</members>
+        <members>Software_Activation_Code__c.*</members>
+        <members>Software_Attribute__c.*</members>
+        <members>Software_Feature__c.*</members>
+        <members>Z2Entitlement__c.*</members>
+        <members>Flow_Personal_Configuration__c.*</members>
+        <members>FlowTableViewDefinition__c.*</members>
+        <name>CustomField</name>
+    </types>
+
+    <!-- Validation Rules -->
+    <types>
+        <members>AccountMustBeInZentitle</members>
+        <members>Block_Changes_After_Creation</members>
+        <members>Attribute_Value_Validation</members>
+        <members>Feature_Value_Validation</members>
+        <name>ValidationRule</name>
+    </types>
+
+    <!-- Flows -->
+    <types>
+        <members>Software_Entitlement_Sync_Updates_To_Zentitle</members>
+        <members>Software_Entitlement_Create_New_Software_Entitlement_in_Zentitle</members>
+        <members>Software_Entitlement_Create_New_Software_Entitlement_in_Zentitle_Sub_Flow</members>
+        <members>Software_Entitlement_Parse_and_Update_Zentitle_Activation_Model_Sub_Flow</members>
+        <members>Software_Entitlement_Parse_and_Update_Zentitle_EntitlementModel_Sub_Flow</members>
+        <members>Software_Entitlement_Push_changes_to_Zentile</members>
+        <members>Software_Entitlement_View_and_Manage_Activations</members>
+        <members>Software_Entitlement_Refresh_Software_Entitlement_From_Zentitle</members>
+        <members>Software_Attribute_Sync_Updates_To_Zentitle</members>
+        <members>Software_Feature_Sync_Updates_To_Zentitle</members>
+        <members>Account_Create_Account_in_Zentitle_as_a_Customer_Sub_Flow</members>
+        <members>Create_Zentitle_Customer</members>
+        <members>Update_Zentitle_Customer</members>
+        <members>Upsert_Zentitle_Customer_subflow</members>
+        <members>UpsertRecordsActionTest</members>
+        <name>Flow</name>
+    </types>
+
+    <!-- Flow Definitions (controls active version) -->
+    <types>
+        <members>*</members>
+        <name>FlowDefinition</name>
+    </types>
+
+    <!-- Page Layouts -->
+    <types>
+        <members>Software_Entitlement__c-Software Entitlement Layout</members>
+        <members>Software_Activation__c-Software Activation Layout</members>
+        <members>Software_Activation_Code__c-Software Activation Code Layout</members>
+        <members>Software_Attribute__c-Attribute Layout</members>
+        <members>Software_Feature__c-Feature Layout</members>
+        <members>Z2Entitlement__c-RJAProduct Layout</members>
+        <members>Flow_Personal_Configuration__c-Flow Personal Configuration Layout</members>
+        <members>FlowTableViewDefinition__c-FlowTableViewDefinition Layout</members>
+        <name>Layout</name>
+    </types>
+
+    <!-- Lightning Pages -->
+    <types>
+        <members>Software_Entitlement_Record_Page</members>
+        <members>AccountLightning1</members>
+        <name>FlexiPage</name>
+    </types>
+
+    <!-- Permission Sets -->
+    <types>
+        <members>Software_Entitlements_Admin</members>
+        <members>Z2_Licensing</members>
+        <name>PermissionSet</name>
+    </types>
+
+    <!-- Tabs -->
+    <types>
+        <members>Software_Entitlement__c</members>
+        <name>CustomTab</name>
+    </types>
+
+    <!-- Named Credentials -->
+    <types>
+        <members>Zentitle_API</members>
+        <name>NamedCredential</name>
+    </types>
+
+    <!-- External Credentials -->
+    <types>
+        <members>Z2ECred</members>
+        <members>ZentitleApi</members>
+        <name>ExternalCredential</name>
+    </types>
+
+    <!-- External Service Registrations -->
+    <types>
+        <members>Z2Ext</members>
+        <name>ExternalServiceRegistration</name>
+    </types>
+
+    <!-- List Views -->
+    <types>
+        <members>Software_Entitlement__c.All</members>
+        <name>ListView</name>
+    </types>
+
+    <!-- Actions -->
+    <types>
+        <members>Software_Entitlement__c.Create_Activation</members>
+        <members>Software_Entitlement__c.Refresh_Entitlement</members>
+        <name>QuickAction</name>
+    </types>
+
+    <version>59.0</version>
+</Package>

@@ -7,11 +7,6 @@
     </externalCredentialPrincipalAccesses>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Account.Zentitle_Customer_ID__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Software_Activation__c.Activated_Date__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -132,8 +127,4 @@
         <object>Software_Feature__c</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
-    <tabSettings>
-        <tab>Software_Entitlement__c</tab>
-        <visibility>Visible</visibility>
-    </tabSettings>
 </PermissionSet>

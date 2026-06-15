@@ -37,7 +37,6 @@
         </inputParameters>
         <nameSegment>UpsertRecordsAction</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
     <assignments>
@@ -95,7 +94,7 @@
             <assignToReference>Var_Software_Activation_Build.Mode__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Loop_Through_Activations.mode.oneOfString</elementReference>
+                <elementReference>Loop_Through_Activations.mode</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -116,7 +115,7 @@
             <assignToReference>Var_Software_Activation_Build.Status__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Loop_Through_Activations.status.oneOfString</elementReference>
+                <elementReference>Loop_Through_Activations.status</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -233,20 +232,23 @@
     </decisions>
     <decisions>
         <description>This validates the model was passed into the flow.</description>
-        <name>Was_Zentitle_PaginatedListOfActivationModel_Passed_In</name>
-        <label>Was Zentitle_PaginatedListOfActivationModel Passed In</label>
+        <name>Was_PaginatedListOfActivationModel_Passed_In</name>
+        <label>Was PaginatedListOfActivationModel Passed In</label>
         <locationX>402</locationX>
         <locationY>134</locationY>
         <defaultConnector>
             <targetReference>Set_Error_Message_No_Records</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>Model Passed in</defaultConnectorLabel>
+        <defaultConnectorLabel>Model Not Passed in</defaultConnectorLabel>
         <rules>
             <name>Software_Entitlement_Record_ID_Missing</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>Var_Software_Entitlement_ID</leftValueReference>
-                <operator>EqualTo</operator>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
             </conditions>
             <connector>
                 <targetReference>Set_Error_Message_No_Records</targetReference>
@@ -257,7 +259,7 @@
             <name>Model_Passed_In</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Zentitle_PaginatedListOfActivationModel</leftValueReference>
+                <leftValueReference>Z2Ext_PaginatedListOfActivationModel</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
@@ -279,7 +281,7 @@
         <label>Loop Through Activations</label>
         <locationX>314</locationX>
         <locationY>242</locationY>
-        <collectionReference>Zentitle_PaginatedListOfActivationModel.items</collectionReference>
+        <collectionReference>Z2Ext_PaginatedListOfActivationModel.items</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
             <targetReference>Build_Activations</targetReference>
@@ -369,7 +371,7 @@
         <locationX>276</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Was_Zentitle_PaginatedListOfActivationModel_Passed_In</targetReference>
+            <targetReference>Was_PaginatedListOfActivationModel_Passed_In</targetReference>
         </connector>
     </start>
     <status>Active</status>
@@ -427,9 +429,8 @@
         </value>
     </variables>
     <variables>
-        <description>This is the Zentitle_PaginatedListOfActivationModel and must be passed into the flow</description>
-        <name>Zentitle_PaginatedListOfActivationModel</name>
-        <apexClass>ExternalService__Zentitle_PaginatedListOfActivationModel</apexClass>
+        <name>Z2Ext_PaginatedListOfActivationModel</name>
+        <apexClass>ExternalService__Z2Ext_PaginatedListOfActivationModel</apexClass>
         <dataType>Apex</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>

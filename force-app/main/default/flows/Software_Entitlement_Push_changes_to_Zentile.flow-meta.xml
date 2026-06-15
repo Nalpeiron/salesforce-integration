@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <description>This will make the api call out to zentitle.</description>
         <name>Send_Updates_To_Zentitle</name>
-        <label>Send Updates To Zentitle</label>
+        <label>Send_Updates_To_Zentitle</label>
         <locationX>182</locationX>
         <locationY>1490</locationY>
-        <actionName>Zentitle.Entitlements_Update</actionName>
+        <actionName>Z2Ext.Entitlements_Update</actionName>
         <actionType>externalService</actionType>
         <connector>
             <targetReference>Was_Update_Successful</targetReference>
         </connector>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>entitlementId</name>
             <value>
@@ -21,12 +20,11 @@
         <inputParameters>
             <name>body</name>
             <value>
-                <elementReference>Zentitle_UpdateEntitlementApiRequest</elementReference>
+                <elementReference>Z2Ext_UpdateEntitlementApiRequest</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>Zentitle.Entitlements_Update</nameSegment>
+        <nameSegment>Z2Ext.Entitlements_Update</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
     <assignments>
@@ -36,10 +34,10 @@
         <locationX>270</locationX>
         <locationY>1190</locationY>
         <assignmentItems>
-            <assignToReference>Zentitle_UpdateEntitlementApiRequest.attributes</assignToReference>
+            <assignToReference>Z2Ext_UpdateEntitlementApiRequest.attributes</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>Zentitle_UpdateAttribute_Build</elementReference>
+                <elementReference>Z2Ext_UpdateAttribute</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -53,10 +51,10 @@
         <locationX>270</locationX>
         <locationY>674</locationY>
         <assignmentItems>
-            <assignToReference>Zentitle_UpdateEntitlementApiRequest.features</assignToReference>
+            <assignToReference>Z2Ext_UpdateEntitlementApiRequest.features</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>Zentitle_UpdateFeature_Build</elementReference>
+                <elementReference>Z2Ext_UpdateFeature</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -98,14 +96,14 @@
         <locationX>270</locationX>
         <locationY>1082</locationY>
         <assignmentItems>
-            <assignToReference>Zentitle_UpdateAttribute_Build.id</assignToReference>
+            <assignToReference>Z2Ext_UpdateAttribute.id</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Loop_Through_Attributes.Zentitle_Attribute_ID__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>Zentitle_UpdateAttribute_Build.value</assignToReference>
+            <assignToReference>Z2Ext_UpdateAttribute.value</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Loop_Through_Attributes.Attribute_Value__c</elementReference>
@@ -122,14 +120,14 @@
         <locationX>270</locationX>
         <locationY>566</locationY>
         <assignmentItems>
-            <assignToReference>Zentitle_UpdateFeature_Build.id</assignToReference>
+            <assignToReference>Z2Ext_UpdateFeature.id</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Loop_Through_Features.Zentitle_Feature_ID__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>Zentitle_UpdateFeature_Build.value</assignToReference>
+            <assignToReference>Z2Ext_UpdateFeature.value</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Loop_Through_Features.Feature_Value__c</elementReference>
@@ -146,21 +144,21 @@
         <locationX>182</locationX>
         <locationY>1382</locationY>
         <assignmentItems>
-            <assignToReference>Zentitle_UpdateEntitlementApiRequest.seatCount</assignToReference>
+            <assignToReference>Z2Ext_UpdateEntitlementApiRequest.seatCount</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>recordId.Entitlement_Seat_Count__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>Zentitle_UpdateEntitlementApiRequest.hasMaintenance</assignToReference>
+            <assignToReference>Z2Ext_UpdateEntitlementApiRequest.hasMaintenance</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Form_HasMaintenance</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>Zentitle_UpdateEntitlementApiRequest.maintenanceExpiryDate</assignToReference>
+            <assignToReference>Z2Ext_UpdateEntitlementApiRequest.maintenanceExpiryDate</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>recordId.Maintenance_Expiry_Date__c</elementReference>
@@ -473,27 +471,24 @@
         </value>
     </variables>
     <variables>
-        <description>This holds the attribute to use in the API callout.</description>
-        <name>Zentitle_UpdateAttribute_Build</name>
-        <apexClass>ExternalService__Zentitle_UpdateAttribute</apexClass>
+        <name>Z2Ext_UpdateAttribute</name>
+        <apexClass>ExternalService__Z2Ext_UpdateAttribute</apexClass>
         <dataType>Apex</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <description>This is the body of the api call to zentitle.</description>
-        <name>Zentitle_UpdateEntitlementApiRequest</name>
-        <apexClass>ExternalService__Zentitle_UpdateEntitlementApiRequest</apexClass>
+        <name>Z2Ext_UpdateEntitlementApiRequest</name>
+        <apexClass>ExternalService__Z2Ext_UpdateEntitlementApiRequest</apexClass>
         <dataType>Apex</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <description>This is the Features to build</description>
-        <name>Zentitle_UpdateFeature_Build</name>
-        <apexClass>ExternalService__Zentitle_UpdateFeature</apexClass>
+        <name>Z2Ext_UpdateFeature</name>
+        <apexClass>ExternalService__Z2Ext_UpdateFeature</apexClass>
         <dataType>Apex</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>60.0</apiVersion>
-    <description>This will create a new Software Entitlement Group in Zentitle when a record is created in salesforce. This will make an external callout in an async path to Zentile and then parse/process all of the response info.</description>
+    <apiVersion>66.0</apiVersion>
     <environments>Default</environments>
-    <interviewLabel>Software Entitlement: Create New Software Entitlement in Zentitle {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Software Entitlement: Create New Software Entitlement in Zentitle</label>
+    <interviewLabel>Update Zentitle Customer {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Zentitle Customer</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -25,28 +24,28 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>50</locationX>
+        <locationX>0</locationX>
         <locationY>0</locationY>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Offering__c</field>
+            <field>Z2CustomerID__c</field>
             <operator>IsNull</operator>
             <value>
                 <booleanValue>false</booleanValue>
             </value>
         </filters>
         <filters>
-            <field>Account__c</field>
-            <operator>IsNull</operator>
+            <field>Name</field>
+            <operator>IsChanged</operator>
             <value>
-                <booleanValue>false</booleanValue>
+                <booleanValue>true</booleanValue>
             </value>
         </filters>
-        <object>Software_Entitlement__c</object>
-        <recordTriggerType>Create</recordTriggerType>
+        <object>Account</object>
+        <recordTriggerType>Update</recordTriggerType>
         <scheduledPaths>
             <connector>
-                <targetReference>Create_New_Software_Entitlement_in_Zentitle_Sub_Flow</targetReference>
+                <targetReference>Update_Customer_Subflow</targetReference>
             </connector>
             <pathType>AsyncAfterCommit</pathType>
         </scheduledPaths>
@@ -54,12 +53,11 @@
     </start>
     <status>Active</status>
     <subflows>
-        <description>This runs the subflow</description>
-        <name>Create_New_Software_Entitlement_in_Zentitle_Sub_Flow</name>
-        <label>Create New Software Entitlement in Zentitle (Sub-Flow)</label>
-        <locationX>308</locationX>
-        <locationY>276</locationY>
-        <flowName>Software_Entitlement_Create_New_Software_Entitlement_in_Zentitle_Sub_Flow</flowName>
+        <name>Update_Customer_Subflow</name>
+        <label>Update Customer Subflow</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>Upsert_Zentitle_Customer_subflow</flowName>
         <inputAssignments>
             <name>recordId</name>
             <value>
@@ -68,4 +66,5 @@
         </inputAssignments>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </subflows>
+    <triggerOrder>500</triggerOrder>
 </Flow>

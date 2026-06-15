@@ -3,7 +3,7 @@
     <fullName>AccountMustBeInZentitle</fullName>
     <active>true</active>
     <description>This was created to prevent using an account that is not already in Zentitle.</description>
-    <errorConditionFormula>ISBLANK(Account__r.Zentitle_Customer_ID__c)</errorConditionFormula>
+    <errorConditionFormula>ISBLANK(Account__r.Z2CustomerID__c)</errorConditionFormula>
     <errorDisplayField>Account__c</errorDisplayField>
     <errorMessage>The account must already be in Zentitle; go to the Account and use the button to send the account to Zentitle before creating the software entitlement.</errorMessage>
 </ValidationRule>

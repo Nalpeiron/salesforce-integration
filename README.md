@@ -2,7 +2,7 @@
 # Salesforce - Zentitle Integration: Next Steps
 
 ## Installation 
-<a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04taj0000004Ha9">
+<a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04tgL000000Gn4n">
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>

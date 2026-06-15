@@ -74,7 +74,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Entitlement_Seat_Count__c</fieldItem>
                 <identifier>RecordEntitlement_Seat_Count_cField</identifier>
@@ -107,6 +107,16 @@
                 </visibilityRule>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Customer_Portal_URL__c</fieldItem>
+                <identifier>RecordPortal_URL__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-8573111f-8ae2-4380-ba58-b3e1f104ae03</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -129,16 +139,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Account__c</fieldItem>
                 <identifier>RecordAccount_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Customer_Portal_URL__c</fieldItem>
-                <identifier>RecordCustomer_Portal_URL_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-1a0d08b3-98aa-4f7d-8128-0b5e23f9abef</name>

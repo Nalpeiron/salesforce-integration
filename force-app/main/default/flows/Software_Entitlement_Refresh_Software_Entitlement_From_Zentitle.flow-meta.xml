@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <description>This will get the activations for the seat.</description>
-        <name>Get_Activations</name>
-        <label>Get Activations</label>
+        <name>Get_Activation_List</name>
+        <label>Get Activation List</label>
         <locationX>314</locationX>
         <locationY>674</locationY>
-        <actionName>Zentitle.Entitlements_GetActivationsSeatList</actionName>
+        <actionName>Z2Ext.Entitlements_GetActivationsSeatList</actionName>
         <actionType>externalService</actionType>
         <connector>
             <targetReference>Process_Activation_updates_for_entitlement</targetReference>
         </connector>
-        <faultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Error_Screen</targetReference>
-        </faultConnector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>entitlementId</name>
@@ -22,9 +17,9 @@
                 <elementReference>recordId.Zentitle_Entitlement_ID__c</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>Zentitle.Entitlements_GetActivationsSeatList</nameSegment>
+        <nameSegment>Z2Ext.Entitlements_GetActivationsSeatList</nameSegment>
         <outputParameters>
-            <assignToReference>Zentitle_PaginatedListOfActivationModel</assignToReference>
+            <assignToReference>Z2Ext_PaginatedListOfActivationModel</assignToReference>
             <name>200</name>
         </outputParameters>
         <outputParameters>
@@ -35,23 +30,17 @@
             <assignToReference>DefaultException</assignToReference>
             <name>defaultExc</name>
         </outputParameters>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
-        <description>This will make an outbound callout to Zentitle to get the latest Software Entitlement information.</description>
-        <name>Get_Software_Entitlement</name>
-        <label>Get Software Entitlement</label>
-        <locationX>204</locationX>
+        <name>Parse_Software_Entitlement</name>
+        <label>Parse Software Entitlement</label>
+        <locationX>138</locationX>
         <locationY>242</locationY>
-        <actionName>Zentitle.Entitlements_Get</actionName>
+        <actionName>Z2Ext.Entitlements_Get</actionName>
         <actionType>externalService</actionType>
         <connector>
             <targetReference>Check_For_Common_Errors</targetReference>
         </connector>
-        <faultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Error_Screen</targetReference>
-        </faultConnector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>entitlementId</name>
@@ -65,9 +54,9 @@
                 <stringValue>attributes,features</stringValue>
             </value>
         </inputParameters>
-        <nameSegment>Zentitle.Entitlements_Get</nameSegment>
+        <nameSegment>Z2Ext.Entitlements_Get</nameSegment>
         <outputParameters>
-            <assignToReference>Zentitle_EntitlementModel</assignToReference>
+            <assignToReference>Z2Ext_EntitlementModel</assignToReference>
             <name>200</name>
         </outputParameters>
         <outputParameters>
@@ -78,14 +67,13 @@
             <assignToReference>DefaultException</assignToReference>
             <name>defaultExc</name>
         </outputParameters>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
     <decisions>
         <description>This will check for common errors</description>
         <name>Check_For_Common_Errors</name>
         <label>Check For Common Errors</label>
-        <locationX>204</locationX>
+        <locationX>138</locationX>
         <locationY>350</locationY>
         <defaultConnector>
             <targetReference>Parse_Software_Entitlement_Attributes_and_Features</targetReference>
@@ -153,7 +141,7 @@
         <description>This checks to see if the features and attributes were successfully updated related to the Software Entitlement.</description>
         <name>Was_Parse_Successful</name>
         <label>Was Parse Successful?</label>
-        <locationX>710</locationX>
+        <locationX>578</locationX>
         <locationY>566</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
@@ -171,7 +159,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_Activations</targetReference>
+                <targetReference>Get_Activation_List</targetReference>
             </connector>
             <label>Successful Parse</label>
         </rules>
@@ -180,7 +168,7 @@
         <description>This checks to validate a Software Entitlement was passed in properly.</description>
         <name>Was_Software_Entitlement_Passed_in</name>
         <label>Was Software Entitlement Passed in?</label>
-        <locationX>919</locationX>
+        <locationX>622</locationX>
         <locationY>134</locationY>
         <defaultConnector>
             <targetReference>Software_Entitlement_Missing</targetReference>
@@ -197,7 +185,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_Software_Entitlement</targetReference>
+                <targetReference>Parse_Software_Entitlement</targetReference>
             </connector>
             <label>Software Entitlement Passed In</label>
         </rules>
@@ -248,7 +236,7 @@
         <inputAssignments>
             <field>Entitlement_Seat_Count__c</field>
             <value>
-                <elementReference>Zentitle_EntitlementModel.seatCount</elementReference>
+                <elementReference>Z2Ext_EntitlementModel.seatCount</elementReference>
             </value>
         </inputAssignments>
         <object>Software_Entitlement__c</object>
@@ -274,7 +262,7 @@
         <description>This shows when a Software Entitlement is missing</description>
         <name>Software_Entitlement_Missing</name>
         <label>Software Entitlement Missing</label>
-        <locationX>1634</locationX>
+        <locationX>1106</locationX>
         <locationY>242</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -310,7 +298,7 @@
         <description>This will display when the response from zentitle needs attention.</description>
         <name>Zentitle_Error</name>
         <label>Zentitle Error</label>
-        <locationX>204</locationX>
+        <locationX>138</locationX>
         <locationY>1598</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -350,7 +338,7 @@
         <showHeader>false</showHeader>
     </screens>
     <start>
-        <locationX>793</locationX>
+        <locationX>496</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Was_Software_Entitlement_Passed_in</targetReference>
@@ -361,7 +349,7 @@
         <description>This sub flow will handle the complex parsing of features and attributes when an entitlement model is passed in.</description>
         <name>Parse_Software_Entitlement_Attributes_and_Features</name>
         <label>Parse Software Entitlement Attributes and Features</label>
-        <locationX>710</locationX>
+        <locationX>578</locationX>
         <locationY>458</locationY>
         <connector>
             <targetReference>Was_Parse_Successful</targetReference>
@@ -374,9 +362,9 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>Zentitle_EntitlementModel</name>
+            <name>Z2Ext_EntitlementModel</name>
             <value>
-                <elementReference>Zentitle_EntitlementModel</elementReference>
+                <elementReference>Z2Ext_EntitlementModel</elementReference>
             </value>
         </inputAssignments>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -398,9 +386,9 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>Zentitle_PaginatedListOfActivationModel</name>
+            <name>Z2Ext_PaginatedListOfActivationModel</name>
             <value>
-                <elementReference>Zentitle_PaginatedListOfActivationModel</elementReference>
+                <elementReference>Z2Ext_PaginatedListOfActivationModel</elementReference>
             </value>
         </inputAssignments>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -432,18 +420,16 @@
         <scale>0</scale>
     </variables>
     <variables>
-        <description>This is the Entitlement Model from the Software Entitlement</description>
-        <name>Zentitle_EntitlementModel</name>
-        <apexClass>ExternalService__Zentitle_EntitlementModel</apexClass>
+        <name>Z2Ext_EntitlementModel</name>
+        <apexClass>ExternalService__Z2Ext_EntitlementModel</apexClass>
         <dataType>Apex</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <description>This holds the activated seats</description>
-        <name>Zentitle_PaginatedListOfActivationModel</name>
-        <apexClass>ExternalService__Zentitle_PaginatedListOfActivationModel</apexClass>
+        <name>Z2Ext_PaginatedListOfActivationModel</name>
+        <apexClass>ExternalService__Z2Ext_PaginatedListOfActivationModel</apexClass>
         <dataType>Apex</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>

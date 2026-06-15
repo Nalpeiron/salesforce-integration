@@ -12,7 +12,7 @@ public class UpsertRecordsActionTest {
 // Create an Account to link with Software_Entitlement
         Account testAccount = new Account(
             Name = 'Test Account',
-            Zentitle_Customer_ID__c = 'Test'
+            Z2CustomerID__c = 'Test'
         );
         insert testAccount;
         
@@ -62,7 +62,7 @@ public class UpsertRecordsActionTest {
 // Create an Account to link with Software_Entitlement
         Account testAccount = new Account(
             Name = 'Test Account',
-            Zentitle_Customer_ID__c = 'Test'
+            Z2CustomerID__c = 'Test'
         );
         insert testAccount;
         
@@ -80,7 +80,7 @@ public class UpsertRecordsActionTest {
 
                 
         List<Software_Entitlement__c> softwareEntitlements = new List<Software_Entitlement__c>();
-		// Add existing single we already created
+        // Add existing single we already created
         softwareEntitlements.add(testSoftwareEntitlement);
         // Create new software entitlement to add
         softwareEntitlements.add(new Software_Entitlement__c(

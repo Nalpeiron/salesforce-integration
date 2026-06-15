@@ -1,45 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <description>This will deactivate an offline with a token</description>
-        <name>Deactivate_Offline_Token</name>
-        <label>Deactivate Offline Token</label>
-        <locationX>1458</locationX>
-        <locationY>1430</locationY>
-        <actionName>Zentitle.OfflineActivations_Deactivate</actionName>
-        <actionType>externalService</actionType>
-        <connector>
-            <targetReference>Was_Deactivate_Sucessful</targetReference>
-        </connector>
-        <faultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>API_Fault</targetReference>
-        </faultConnector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>body</name>
-            <value>
-                <elementReference>Zentitle_OfflineDeactivationApiRequest</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>Zentitle.OfflineActivations_Deactivate</nameSegment>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
-    </actionCalls>
-    <actionCalls>
-        <description>This will delete the activation that was selected</description>
         <name>Delete_Activations</name>
         <label>Delete Activations</label>
-        <locationX>1414</locationX>
-        <locationY>2096</locationY>
-        <actionName>Zentitle.Activations_Delete</actionName>
+        <locationX>1282</locationX>
+        <locationY>2180</locationY>
+        <actionName>Z2Ext.Activations_Delete</actionName>
         <actionType>externalService</actionType>
         <connector>
-            <targetReference>Was_Delete_Sucessful</targetReference>
+            <targetReference>Was_Delete_Successful</targetReference>
         </connector>
-        <faultConnector>
-            <targetReference>API_Fault</targetReference>
-        </faultConnector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>activationId</name>
@@ -47,31 +17,39 @@
                 <elementReference>SoftwareActivations.firstSelectedRow.Zentitle_Activation_ID__c</elementReference>
             </value>
         </inputParameters>
-        <inputParameters>
-            <name>force</name>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </inputParameters>
-        <nameSegment>Zentitle.Activations_Delete</nameSegment>
+        <nameSegment>Z2Ext.Activations_Delete</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
-        <description>This will get all of the seat activations for the entitlement</description>
-        <name>Get_all_Seat_Activations</name>
-        <label>Get all Seat Activations</label>
-        <locationX>2767</locationX>
+        <name>Delete_Offline_Activations</name>
+        <label>Delete Offline Activations</label>
+        <locationX>1458</locationX>
+        <locationY>1430</locationY>
+        <actionName>Z2Ext.OfflineActivations_DeactivateOfflineActivation</actionName>
+        <actionType>externalService</actionType>
+        <connector>
+            <targetReference>Was_Deactivate_Sucessful</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>Z2Ext_OfflineDeactivationApiRequest</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Z2Ext.OfflineActivations_DeactivateOfflineActivation</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
+        <name>Get_All_Seat_Activations</name>
+        <label>Get All Seat Activations</label>
+        <locationX>2338</locationX>
         <locationY>350</locationY>
-        <actionName>Zentitle.Entitlements_GetActivationsSeatList</actionName>
+        <actionName>Z2Ext.Entitlements_GetActivationsSeatList</actionName>
         <actionType>externalService</actionType>
         <connector>
             <targetReference>Error_Check</targetReference>
         </connector>
-        <faultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>API_Fault</targetReference>
-        </faultConnector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>entitlementId</name>
@@ -91,9 +69,9 @@
                 <numberValue>40.0</numberValue>
             </value>
         </inputParameters>
-        <nameSegment>Zentitle.Entitlements_GetActivationsSeatList</nameSegment>
+        <nameSegment>Z2Ext.Entitlements_GetActivationsSeatList</nameSegment>
         <outputParameters>
-            <assignToReference>Zentitle_PaginatedListOfActivationModel</assignToReference>
+            <assignToReference>Z2Ext_PaginatedListOfActivationModel</assignToReference>
             <name>200</name>
         </outputParameters>
         <outputParameters>
@@ -104,7 +82,6 @@
             <assignToReference>DefaultException</assignToReference>
             <name>defaultExc</name>
         </outputParameters>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
     <assignments>
@@ -114,21 +91,21 @@
         <locationX>1458</locationX>
         <locationY>1322</locationY>
         <assignmentItems>
-            <assignToReference>Zentitle_OfflineDeactivationApiRequest.token</assignToReference>
+            <assignToReference>Z2Ext_OfflineDeactivationApiRequest.token</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Offline_Deactivation_Token</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Deactivate_Offline_Token</targetReference>
+            <targetReference>Delete_Offline_Activations</targetReference>
         </connector>
     </assignments>
     <decisions>
         <description>This checks for errors with the callout to get the activations</description>
         <name>Error_Check</name>
         <label>Error Check</label>
-        <locationX>2767</locationX>
+        <locationX>2338</locationX>
         <locationY>458</locationY>
         <defaultConnector>
             <targetReference>Error_Callout_Screen</targetReference>
@@ -190,7 +167,7 @@
             <name>Deactivate_Was_Successful</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Deactivate_Offline_Token.responseCode</leftValueReference>
+                <leftValueReference>Delete_Offline_Activations.responseCode</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <numberValue>204.0</numberValue>
@@ -204,10 +181,10 @@
     </decisions>
     <decisions>
         <description>This checks to see if the api callout was a success.</description>
-        <name>Was_Delete_Sucessful</name>
-        <label>Was Delete Sucessful?</label>
-        <locationX>1414</locationX>
-        <locationY>2204</locationY>
+        <name>Was_Delete_Successful</name>
+        <label>Was Delete Successful?</label>
+        <locationX>1282</locationX>
+        <locationY>2288</locationY>
         <defaultConnector>
             <targetReference>Deletion_Failure</targetReference>
         </defaultConnector>
@@ -232,7 +209,7 @@
         <description>This validates a software entitlement was passed into the flow</description>
         <name>Was_Record_Passed_In</name>
         <label>Was Record Passed In?</label>
-        <locationX>1942</locationX>
+        <locationX>1546</locationX>
         <locationY>242</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
@@ -287,7 +264,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_all_Seat_Activations</targetReference>
+                <targetReference>Get_All_Seat_Activations</targetReference>
             </connector>
             <label>Valid Record Passed In</label>
         </rules>
@@ -296,7 +273,7 @@
         <description>This checks if the update was a success.</description>
         <name>Was_Update_Success</name>
         <label>Was Update Success?</label>
-        <locationX>2228</locationX>
+        <locationX>1898</locationX>
         <locationY>674</locationY>
         <defaultConnector>
             <targetReference>Error_Update_Screen</targetReference>
@@ -322,7 +299,7 @@
         <description>This checks if any records were selected to update.</description>
         <name>Were_any_records_selected</name>
         <label>Were any records selected?</label>
-        <locationX>1414</locationX>
+        <locationX>1282</locationX>
         <locationY>998</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
@@ -339,10 +316,6 @@
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
-            <connector>
-                <isGoTo>true</isGoTo>
-                <targetReference>Get_all_Seat_Activations</targetReference>
-            </connector>
             <label>No Records Selected</label>
         </rules>
         <rules>
@@ -409,42 +382,30 @@
             <isGoTo>true</isGoTo>
             <targetReference>Was_Record_Passed_In</targetReference>
         </connector>
-        <faultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>API_Fault</targetReference>
-        </faultConnector>
         <inputReference>SoftwareActivations.firstSelectedRow</inputReference>
     </recordDeletes>
     <recordDeletes>
         <description>This will delete the deactivated seat</description>
         <name>Delete_Deactivated_Seat</name>
         <label>Delete Deactivated Seat</label>
-        <locationX>1150</locationX>
-        <locationY>2312</locationY>
+        <locationX>1018</locationX>
+        <locationY>2396</locationY>
         <connector>
             <isGoTo>true</isGoTo>
             <targetReference>Was_Record_Passed_In</targetReference>
         </connector>
-        <faultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>API_Fault</targetReference>
-        </faultConnector>
         <inputReference>SoftwareActivations.firstSelectedRow</inputReference>
     </recordDeletes>
     <recordLookups>
         <description>This will get all of the activations for the Software Entitlement.</description>
         <name>Get_All_Activations</name>
         <label>Get All Activations</label>
-        <locationX>1414</locationX>
+        <locationX>1282</locationX>
         <locationY>782</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Display_Activations</targetReference>
         </connector>
-        <faultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>API_Fault</targetReference>
-        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Software_Entitlement__c</field>
@@ -461,7 +422,7 @@
         <description>This will get the Organization so we can use it to check if this is a sandbox or not.</description>
         <name>Get_Current_Org</name>
         <label>Get Current Org</label>
-        <locationX>1942</locationX>
+        <locationX>1546</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -484,23 +445,6 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <screens>
-        <description>This displays when there is an api fault</description>
-        <name>API_Fault</name>
-        <label>API Fault</label>
-        <locationX>2514</locationX>
-        <locationY>2204</locationY>
-        <allowBack>false</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>false</allowPause>
-        <fields>
-            <name>APIFaultMessage</name>
-            <fieldText>&lt;p&gt;An issue happened with the deactivation.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Error:&lt;/strong&gt; {!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>false</showHeader>
-    </screens>
-    <screens>
         <description>this shows when there is an error deactivating</description>
         <name>deactivation_failure</name>
         <label>deactivation failure</label>
@@ -515,7 +459,7 @@
         </connector>
         <fields>
             <name>DeactivateErrorMessage</name>
-            <fieldText>&lt;p&gt;There was an error deactivating the offline license. &lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Error:&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;{!Deactivate_Offline_Token.defaultExc}&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;There was an error deactivating the offline license.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Error:&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;{!Delete_Offline_Activations.defaultExc}&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
@@ -525,8 +469,8 @@
         <description>The activation failed to deactivate screen</description>
         <name>Deletion_Failure</name>
         <label>Deletion Failure</label>
-        <locationX>1678</locationX>
-        <locationY>2312</locationY>
+        <locationX>1546</locationX>
+        <locationY>2396</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -536,7 +480,7 @@
         </connector>
         <fields>
             <name>DeactivateErrorText</name>
-            <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 16px;&quot;&gt;The activation failed to deactivate. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Error Message: &lt;/strong&gt;{!Delete_Activations.defaultExc}&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 16px;&quot;&gt;The activation failed to deactivate. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Error Message: &lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
@@ -546,7 +490,7 @@
         <description>This will display all of the activations to the user.</description>
         <name>Display_Activations</name>
         <label>Display Activations</label>
-        <locationX>1414</locationX>
+        <locationX>1282</locationX>
         <locationY>890</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -622,7 +566,7 @@
         <description>This displays a callout error message</description>
         <name>Error_Callout_Screen</name>
         <label>Error Callout Screen</label>
-        <locationX>3306</locationX>
+        <locationX>2778</locationX>
         <locationY>566</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -639,7 +583,7 @@
         <description>This displays a sub flow error message</description>
         <name>Error_Update_Screen</name>
         <label>Error Update Screen</label>
-        <locationX>3042</locationX>
+        <locationX>2514</locationX>
         <locationY>782</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -750,7 +694,7 @@
         <showHeader>false</showHeader>
     </screens>
     <start>
-        <locationX>1816</locationX>
+        <locationX>1420</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Current_Org</targetReference>
@@ -761,7 +705,7 @@
         <description>This will update the Software Activation for the Entitlement.</description>
         <name>Update_Software_Activation_For_Entitlements</name>
         <label>Update Software Activation For Entitlements</label>
-        <locationX>2228</locationX>
+        <locationX>1898</locationX>
         <locationY>566</locationY>
         <connector>
             <targetReference>Was_Update_Success</targetReference>
@@ -774,9 +718,9 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>Zentitle_PaginatedListOfActivationModel</name>
+            <name>Z2Ext_PaginatedListOfActivationModel</name>
             <value>
-                <elementReference>Zentitle_PaginatedListOfActivationModel</elementReference>
+                <elementReference>Z2Ext_PaginatedListOfActivationModel</elementReference>
             </value>
         </inputAssignments>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -808,21 +752,19 @@
         <scale>0</scale>
     </variables>
     <variables>
-        <description>This is the body for the offline deactivation request.</description>
-        <name>Zentitle_OfflineDeactivationApiRequest</name>
-        <apexClass>ExternalService__Zentitle_OfflineDeactivationApiRequest</apexClass>
+        <name>Z2Ext_OfflineDeactivationApiRequest</name>
+        <apexClass>ExternalService__Z2Ext_OfflineDeactivationApiRequest</apexClass>
         <dataType>Apex</dataType>
         <isCollection>false</isCollection>
-        <isInput>false</isInput>
+        <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <description>This is the output of the activation list from the callout.</description>
-        <name>Zentitle_PaginatedListOfActivationModel</name>
-        <apexClass>ExternalService__Zentitle_PaginatedListOfActivationModel</apexClass>
+        <name>Z2Ext_PaginatedListOfActivationModel</name>
+        <apexClass>ExternalService__Z2Ext_PaginatedListOfActivationModel</apexClass>
         <dataType>Apex</dataType>
         <isCollection>false</isCollection>
-        <isInput>false</isInput>
+        <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
 </Flow>
